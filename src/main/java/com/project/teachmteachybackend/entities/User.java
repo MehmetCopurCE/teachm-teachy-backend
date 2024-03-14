@@ -1,11 +1,14 @@
 package com.project.teachmteachybackend.entities;
 
-import com.project.teachmteachybackend.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -19,28 +22,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @NotBlank(message = "Kullanıcı adı boş olamaz")
     private String userName;
 
-    @Column(name = "password", nullable = false)
+    @NotBlank(message = "Şifre boş olamaz")
     private String password;
 
-    @Column(name = "first_name", nullable = false)
+    @NotBlank(message = "İsim boş olamaz")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
+    @NotBlank(message = "Soyisim boş olamaz")
     private String lastName;
 
-    @Email
-    @Column(name = "email", nullable = false)
+    @Email(message = "Geçerli bir e-posta adresi giriniz")
+    @NotBlank(message = "E-posta boş olamaz")
     private String email;
 
-    @Column(name = "registration_date")
     private Timestamp created_at;
 
+    @NotEmpty(message = "En az bir role seçilmelidir")
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
+    @Column(nullable = false, columnDefinition = "DOUBLE DEFAULT 0")
     private double userStatistic;
 }
