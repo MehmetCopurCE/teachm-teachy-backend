@@ -46,4 +46,5 @@ public class User {
 
     @Column(nullable = false, columnDefinition = "DOUBLE DEFAULT 0")
     private double userStatistic;
+
 }
