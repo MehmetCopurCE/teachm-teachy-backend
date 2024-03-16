@@ -1,21 +1,35 @@
 package com.project.teachmteachybackend.services;
 
+import com.project.teachmteachybackend.entities.Role;
 import com.project.teachmteachybackend.entities.User;
+import com.project.teachmteachybackend.repositories.RoleRepository;
 import com.project.teachmteachybackend.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.project.teachmteachybackend.request.UserCreateRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+
 @Service
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
-    public User saveUser(User user) {
+    public User saveUser(UserCreateRequest createRequest) {
+        User user = new User();
+        user.setUsername(createRequest.getUsername());
+        user.setPassword(createRequest.getPassword());
+        user.setFirstName(createRequest.getFirstName());
+        user.setLastName(createRequest.getLastName());
+        user.setEmail(createRequest.getEmail());
+        user.setUserStatistic(0.0);
+        Role defaultRole = roleRepository.findByRoleName("ROLE_USER");
+        user.setRoles(new HashSet<>(Collections.singleton(defaultRole)));
+        user.setCreated_at(new Date());
         return userRepository.save(user);
     }
 
@@ -29,7 +43,7 @@ public class UserService {
 
     public Optional<User> updateUser(Long userId, User user) {
         return userRepository.findById(userId).map(existingUser -> {
-            existingUser.setUserName(user.getUserName());
+            existingUser.setUsername(user.getUsername());
             existingUser.setPassword(user.getPassword());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());

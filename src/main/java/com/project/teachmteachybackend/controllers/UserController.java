@@ -1,6 +1,7 @@
 package com.project.teachmteachybackend.controllers;
 
 import com.project.teachmteachybackend.entities.User;
+import com.project.teachmteachybackend.request.UserCreateRequest;
 import com.project.teachmteachybackend.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +21,18 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping()
-    public ResponseEntity<?> createUser(@Valid @RequestBody User user, BindingResult bindingResult){
+    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest createRequest, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        User savedUser =  userService.saveUser(user);
+        User savedUser =  userService.saveUser(createRequest);
         return ResponseEntity.ok(savedUser);
     }
 

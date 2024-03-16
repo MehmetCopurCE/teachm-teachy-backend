@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,7 +24,7 @@ public class User {
     private Long id;
 
     @NotBlank(message = "Kullanıcı adı boş olamaz")
-    private String userName;
+    private String username;
 
     @NotBlank(message = "Şifre boş olamaz")
     private String password;
@@ -38,11 +39,11 @@ public class User {
     @NotBlank(message = "E-posta boş olamaz")
     private String email;
 
-    private Timestamp created_at;
+    private Date created_at;
 
     @NotEmpty(message = "En az bir role seçilmelidir")
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     @Column(nullable = false, columnDefinition = "DOUBLE DEFAULT 0")
     private double userStatistic;
