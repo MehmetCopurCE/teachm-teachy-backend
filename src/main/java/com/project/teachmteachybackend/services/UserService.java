@@ -13,10 +13,12 @@ import java.util.*;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, RoleRepository roleRepository, RoleService roleService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.roleService = roleService;
     }
 
     public User saveUser(UserCreateRequest createRequest) {
@@ -27,8 +29,12 @@ public class UserService {
         user.setLastName(createRequest.getLastName());
         user.setEmail(createRequest.getEmail());
         user.setUserStatistic(0.0);
-        Role defaultRole = roleRepository.findByRoleName("ROLE_USER");
-        user.setRoles(new HashSet<>(Collections.singleton(defaultRole)));
+        Role myRole = roleService.getRoleByName("ROLE_USER");
+        if(myRole == null){
+            Role userRole = new Role("ROLE_USER");
+            myRole = roleService.saveRole(userRole);
+        }
+        user.setRoles(new HashSet<>(Collections.singleton(myRole)));
         user.setCreated_at(new Date());
         return userRepository.save(user);
     }
@@ -41,15 +47,15 @@ public class UserService {
         return userRepository.findById(userId);
     }
 
-    public Optional<User> updateUser(Long userId, User user) {
+    public Optional<User> updateUser(Long userId, UserCreateRequest createRequest) {
         return userRepository.findById(userId).map(existingUser -> {
-            existingUser.setUsername(user.getUsername());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setFirstName(user.getFirstName());
-            existingUser.setLastName(user.getLastName());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setRoles(user.getRoles());
-            existingUser.setUserStatistic(user.getUserStatistic());
+            existingUser.setUsername(createRequest.getUsername());
+            existingUser.setPassword(createRequest.getPassword());
+            existingUser.setFirstName(createRequest.getFirstName());
+            existingUser.setLastName(createRequest.getLastName());
+            existingUser.setEmail(createRequest.getEmail());
+            existingUser.setRoles(existingUser.getRoles());
+            existingUser.setUserStatistic(existingUser.getUserStatistic());
             return userRepository.save(existingUser);
         });
     }

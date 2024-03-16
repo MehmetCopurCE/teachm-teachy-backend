@@ -1,11 +1,11 @@
 package com.project.teachmteachybackend.request;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-import jakarta.validation.constraints.*;
-import lombok.Data;
-
-@Data
-public class UserCreateRequest {
+public class UserUpdateRequest {
     @NotNull
     @NotBlank(message = "Kullanıcı adı boş olamaz")
     private String username;

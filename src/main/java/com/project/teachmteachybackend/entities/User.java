@@ -45,7 +45,6 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
-    @Column(nullable = false, columnDefinition = "DOUBLE DEFAULT 0")
     private double userStatistic;
 
 }
