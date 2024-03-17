@@ -1,39 +1,55 @@
 package com.project.teachmteachybackend.services;
 
 
+import com.project.teachmteachybackend.dto.post.response.PostResponse;
 import com.project.teachmteachybackend.entities.Post;
+import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.PostRepository;
-import com.project.teachmteachybackend.request.PostCreateRequest;
-import com.project.teachmteachybackend.request.PostUpdateRequest;
+import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
+import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final UserService userService;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, UserService userService) {
         this.postRepository = postRepository;
+        this.userService = userService;
     }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<PostResponse> getAllPosts(Optional<Long> userId) {
+        List<Post> list;
+        if(userId.isPresent())
+            list = postRepository.findByUser_Id(userId);
+        else
+            list = postRepository.findAll();
+        return list.stream().map(PostResponse::new).collect(Collectors.toList());
     }
 
     public Post createPost(PostCreateRequest createRequest) {
+        User user = userService.getUserById(createRequest.getUserId());
+        if(user == null)
+            return null; //TODO Burada bir hata mesajıda dönderebilirsin
+
         Post toSave = new Post();
-        toSave.setUserId(createRequest.getUserId());
+        toSave.setUser(user);
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
         toSave.setCreated_at(new Date());
         return postRepository.save(toSave);
     }
 
-    public Optional<Post> getPostById(Long postId) {
-        return postRepository.findById(postId);
+    public PostResponse getPostById(Long postId) {
+        Post post = postRepository.findById(postId).orElse(null);
+        return (post != null) ? new PostResponse(post) : null;
     }
 
     public Optional<Post> updatePost(Long postId, PostUpdateRequest updateRequest) {

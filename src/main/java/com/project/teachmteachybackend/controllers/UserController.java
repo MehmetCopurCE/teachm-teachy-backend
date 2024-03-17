@@ -1,18 +1,16 @@
 package com.project.teachmteachybackend.controllers;
 
 import com.project.teachmteachybackend.entities.User;
-import com.project.teachmteachybackend.request.UserCreateRequest;
+import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import com.project.teachmteachybackend.services.UserService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/*
+/**
  ./users
  ./users/{userId}
  */

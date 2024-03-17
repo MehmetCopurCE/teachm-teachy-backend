@@ -1,16 +1,23 @@
 package com.project.teachmteachybackend.controllers;
 
+import com.project.teachmteachybackend.dto.post.response.PostResponse;
 import com.project.teachmteachybackend.entities.Post;
-import com.project.teachmteachybackend.request.PostCreateRequest;
-import com.project.teachmteachybackend.request.PostUpdateRequest;
+import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
+import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import com.project.teachmteachybackend.services.PostService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
+/**
+ ./posts
+ ./posts?userId={userId}
+ ./posts/{postId}
+ */
 
 @RestController
 @RequestMapping("/posts")
@@ -21,9 +28,13 @@ public class PostController {
         this.postService = postService;
     }
 
+    /**
+     * ./posts
+     * ./posts?userId={userId}
+     */
     @GetMapping
-    public ResponseEntity<List<Post>> getAllPosts(){
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<List<PostResponse>> getAllPosts(@RequestParam Optional<Long> userId){
+        return ResponseEntity.ok(postService.getAllPosts(userId));
     }
 
     @PostMapping
@@ -36,9 +47,13 @@ public class PostController {
         return ResponseEntity.ok(post);
     }
 
+    /**
+     * ./posts/{postId}
+     */
     @GetMapping("/{postId}")
-    public ResponseEntity<Post> getPostById(@PathVariable Long postId){
-        return postService.getPostById(postId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public PostResponse getPostById(@PathVariable Long postId){
+        //return postService.getPostById(postId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+        return postService.getPostById(postId);
     }
 
     @PutMapping("/{postId}")

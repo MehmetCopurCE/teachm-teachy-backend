@@ -1,4 +1,4 @@
-package com.project.teachmteachybackend.request;
+package com.project.teachmteachybackend.dto.post.request;
 
 import lombok.Data;
 

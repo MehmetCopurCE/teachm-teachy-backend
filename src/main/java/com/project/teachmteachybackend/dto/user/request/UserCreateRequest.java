@@ -1,4 +1,4 @@
-package com.project.teachmteachybackend.request;
+package com.project.teachmteachybackend.dto.user.request;
 
 
 import jakarta.validation.constraints.*;

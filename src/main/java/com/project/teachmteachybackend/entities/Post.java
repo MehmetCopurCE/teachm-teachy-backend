@@ -1,9 +1,12 @@
 package com.project.teachmteachybackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.Date;
 @Data
@@ -18,8 +21,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Post için userId boş olamaz")
-    private Long userId;
+    // private Long userId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="user_id", nullable=false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    //@JsonIgnore
+    private User user;
 
     @NotNull
     @NotBlank(message = "Post başlığı boş olamaz")

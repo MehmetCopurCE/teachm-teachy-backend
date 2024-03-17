@@ -2,9 +2,8 @@ package com.project.teachmteachybackend.services;
 
 import com.project.teachmteachybackend.entities.Role;
 import com.project.teachmteachybackend.entities.User;
-import com.project.teachmteachybackend.repositories.RoleRepository;
 import com.project.teachmteachybackend.repositories.UserRepository;
-import com.project.teachmteachybackend.request.UserCreateRequest;
+import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -12,12 +11,11 @@ import java.util.*;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+
     private final RoleService roleService;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, RoleService roleService) {
+    public UserService(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
         this.roleService = roleService;
     }
 
@@ -65,5 +63,9 @@ public class UserService {
             userRepository.delete(user);
             return true;
         }).orElse(false);
+    }
+
+    public User getUserById(Long userId) {
+        return userRepository.findById(userId).orElse(null);
     }
 }
