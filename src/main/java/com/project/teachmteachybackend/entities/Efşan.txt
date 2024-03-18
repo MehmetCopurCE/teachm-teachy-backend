@@ -1,0 +1,11 @@
+Efşan bu kısımda İlk olarak bir Like objesi oluşturman lazım ve bunun bi kaç özelliğini belirli annotationlar ile
+belirtmen lazım. Buradaki yapman gerekenleri kolay olması için sana maddeler şeklinde sıralayacağım
+
+Database şemasında bulunan Like objesini burada aynı özellikler ile oluşturacağız.
+- Diğer entityler gibi (user,comment,post) bir class oluştur.
+- Bu Like classının bir entity olduğunu ve db ye kaydetmek için sayfanın başına gerekli annotationları eklemelisin.(@Data,@Entity,...)
+- Tablo ismi için senden "p_like" yapmanı isticem diğer türlü db de o tablo ismi başka bi şeye indexli sanırım olmuyor
+- Like objesinin kendi parametrelerini ekle (tabloda olanlar. Burada diğer entitylerden yardım alabilirsin)
+- Bu like obje parametreleri için belirli annotationları belirtmen lazım (id üzerindeki @Id gibi ve diğerleri)
+
+Bunlar entity de yapman gerekenler. Şimdi eğer bu kısmı tamamladıysan "Controller-Service-Repository" kısmına geçebiliriz.
