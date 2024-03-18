@@ -43,8 +43,8 @@ public class PostController {
         if(bindingResult.hasErrors()){
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
-        Post post =  postService.createPost(postCreateRequest);
-        return ResponseEntity.ok(post);
+        PostResponse postResponse =  postService.createPost(postCreateRequest);
+        return ResponseEntity.ok(postResponse);
     }
 
     /**
@@ -57,7 +57,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<Post> updatePost(@PathVariable Long postId, @RequestBody @Valid PostUpdateRequest updateRequest){
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long postId, @RequestBody @Valid PostUpdateRequest updateRequest){
         return postService.updatePost(postId,updateRequest).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 

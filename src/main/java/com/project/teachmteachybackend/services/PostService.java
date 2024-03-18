@@ -7,7 +7,6 @@ import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.PostRepository;
 import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -34,7 +33,7 @@ public class PostService {
         return list.stream().map(PostResponse::new).collect(Collectors.toList());
     }
 
-    public Post createPost(PostCreateRequest createRequest) {
+    public PostResponse createPost(PostCreateRequest createRequest) {
         User user = userService.getUserById(createRequest.getUserId());
         if(user == null)
             return null; //TODO Burada bir hata mesajıda dönderebilirsin
@@ -44,7 +43,7 @@ public class PostService {
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
         toSave.setCreated_at(new Date());
-        return postRepository.save(toSave);
+        return new PostResponse(postRepository.save(toSave));
     }
 
     public PostResponse getPostById(Long postId) {
@@ -52,11 +51,11 @@ public class PostService {
         return (post != null) ? new PostResponse(post) : null;
     }
 
-    public Optional<Post> updatePost(Long postId, PostUpdateRequest updateRequest) {
+    public Optional<PostResponse> updatePost(Long postId, PostUpdateRequest updateRequest) {
         return postRepository.findById(postId).map(existingPost ->{
             existingPost.setTitle(updateRequest.getTitle());
             existingPost.setContent(updateRequest.getContent());
-            return postRepository.save(existingPost);
+            return new PostResponse(postRepository.save(existingPost));
         });
     }
 
