@@ -1,6 +1,8 @@
 package com.project.teachmteachybackend.dto.post.response;
 
 import com.project.teachmteachybackend.entities.Post;
+import com.project.teachmteachybackend.entities.User;
+import com.project.teachmteachybackend.services.UserService;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,4 +24,18 @@ public class PostResponse {
         this.content = entity.getContent();
         this.createdAt = entity.getCreated_at();
     }
+
+    public Post toPost(UserService userService){
+        User user = userService.getUserById(this.id);
+        if(user == null)
+            return null;
+        Post post = new Post();
+        post.setId(this.id);
+        post.setTitle(this.title);
+        post.setContent(this.content);
+        post.setUser(user);
+        post.setCreated_at(this.createdAt);
+        return post;
+    }
+
 }
