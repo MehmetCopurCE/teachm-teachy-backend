@@ -27,6 +27,8 @@ public class UserService {
         user.setFirstName(createRequest.getFirstName());
         user.setLastName(createRequest.getLastName());
         user.setEmail(createRequest.getEmail());
+        user.setQuestion(createRequest.getQuestion());
+        user.setAnswer(createRequest.getAnswer());
         user.setUserStatistic(0.0);
         Role myRole = roleService.getRoleByName("ROLE_USER");
         if(myRole == null){
@@ -54,6 +56,8 @@ public class UserService {
             existingUser.setFirstName(createRequest.getFirstName());
             existingUser.setLastName(createRequest.getLastName());
             existingUser.setEmail(createRequest.getEmail());
+            existingUser.setQuestion(createRequest.getQuestion());
+            existingUser.setAnswer(createRequest.getAnswer());
             existingUser.setRoles(existingUser.getRoles());
             existingUser.setUserStatistic(existingUser.getUserStatistic());
             return userRepository.save(existingUser);

@@ -24,21 +24,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Kullanıcı adı boş olamaz")
     private String username;
 
-    @NotBlank(message = "Şifre boş olamaz")
     private String password;
 
-    @NotBlank(message = "İsim boş olamaz")
     private String firstName;
 
-    @NotBlank(message = "Soyisim boş olamaz")
     private String lastName;
 
-    @Email(message = "Geçerli bir e-posta adresi giriniz")
-    @NotBlank(message = "E-posta boş olamaz")
     private String email;
+
+    private String question;
+
+    private String answer;
 
     //private Date created_at;
     private LocalDateTime created_at;

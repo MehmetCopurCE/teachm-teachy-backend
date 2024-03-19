@@ -30,4 +30,12 @@ public class UserCreateRequest {
     @Email(message = "Geçerli bir e-posta adresi giriniz")
     @NotBlank(message = "E-posta boş olamaz")
     private String email;
+
+    @NotNull
+    @NotBlank(message = "User question cannot be empty")
+    private String question;
+
+    @NotNull
+    @NotBlank(message = "User question answer cannot be empty")
+    private String answer;
 }
