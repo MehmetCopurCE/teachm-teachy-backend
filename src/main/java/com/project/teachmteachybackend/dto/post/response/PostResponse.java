@@ -5,6 +5,7 @@ import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.services.UserService;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -14,7 +15,8 @@ public class PostResponse {
     private String username;
     private String title;
     private String content;
-    private Date createdAt;
+    //private Date createdAt;
+    private LocalDateTime createdAt;
 
     public PostResponse(Post entity){
         this.id = entity.getId();

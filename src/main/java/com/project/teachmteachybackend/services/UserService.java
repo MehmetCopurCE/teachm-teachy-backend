@@ -6,6 +6,7 @@ import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -33,7 +34,8 @@ public class UserService {
             myRole = roleService.saveRole(userRole);
         }
         user.setRoles(new HashSet<>(Collections.singleton(myRole)));
-        user.setCreated_at(new Date());
+        //user.setCreated_at(new Date());
+        user.setCreated_at(LocalDateTime.now());
         return userRepository.save(user);
     }
 

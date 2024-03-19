@@ -9,6 +9,7 @@ import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,7 @@ public class PostService {
         toSave.setUser(user);
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
-        toSave.setCreated_at(new Date());
+        toSave.setCreated_at(LocalDateTime.now());
         return new PostResponse(postRepository.save(toSave));
     }
 

@@ -9,6 +9,7 @@ import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.CommentRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -35,7 +36,8 @@ public class CommentService {
             toSave.setContent(createRequest.getContent());
             toSave.setUser(user);
             toSave.setPost(postResponse.toPost(userService));
-            toSave.setCreated_at(new Date());
+            //toSave.setCreated_at(new Date());
+            toSave.setCreated_at(LocalDateTime.now());
             return new CommentResponse(commentRepository.save(toSave));
         }
         return null;

@@ -8,6 +8,8 @@ import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 @Data
 @Entity
@@ -37,7 +39,8 @@ public class Post {
     @Column(columnDefinition="text")
     private String content;
 
-    private Date created_at;
+    //private Date created_at;
+    private LocalDateTime created_at;
 }
 
 /*

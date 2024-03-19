@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +40,8 @@ public class User {
     @NotBlank(message = "E-posta boş olamaz")
     private String email;
 
-    private Date created_at;
+    //private Date created_at;
+    private LocalDateTime created_at;
 
     @NotEmpty(message = "En az bir role seçilmelidir")
     @ManyToMany(fetch = FetchType.EAGER)

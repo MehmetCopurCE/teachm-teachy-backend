@@ -8,6 +8,7 @@ import com.project.teachmteachybackend.services.PostService;
 import com.project.teachmteachybackend.services.UserService;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -16,7 +17,8 @@ public class CommentResponse {
     private Long userId;
     private Long postId;
     private String content;
-    private Date createdAt;
+    //private Date createdAt;
+    private LocalDateTime createdAt;
 
     public CommentResponse(Comment entity){
         this.id = entity.getId();
