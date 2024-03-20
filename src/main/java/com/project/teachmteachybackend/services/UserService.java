@@ -13,11 +13,8 @@ import java.util.*;
 public class UserService {
     private final UserRepository userRepository;
 
-    private final RoleService roleService;
-
-    public UserService(UserRepository userRepository, RoleService roleService) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
     }
 
     public User saveUser(UserCreateRequest createRequest) {
@@ -29,15 +26,9 @@ public class UserService {
         user.setEmail(createRequest.getEmail());
         user.setQuestion(createRequest.getQuestion());
         user.setAnswer(createRequest.getAnswer());
+        user.setRole(Role.ROLE_USER);
         user.setUserStatistic(0.0);
-        Role myRole = roleService.getRoleByName("ROLE_USER");
-        if(myRole == null){
-            Role userRole = new Role("ROLE_USER");
-            myRole = roleService.saveRole(userRole);
-        }
-        user.setRoles(new HashSet<>(Collections.singleton(myRole)));
-        //user.setCreated_at(new Date());
-        user.setCreated_at(LocalDateTime.now());
+        user.setRegistrationTime(LocalDateTime.now());
         return userRepository.save(user);
     }
 
@@ -58,7 +49,6 @@ public class UserService {
             existingUser.setEmail(createRequest.getEmail());
             existingUser.setQuestion(createRequest.getQuestion());
             existingUser.setAnswer(createRequest.getAnswer());
-            existingUser.setRoles(existingUser.getRoles());
             existingUser.setUserStatistic(existingUser.getUserStatistic());
             return userRepository.save(existingUser);
         });

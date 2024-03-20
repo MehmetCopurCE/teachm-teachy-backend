@@ -14,11 +14,9 @@ import java.util.Set;
 
 @Entity
 @Data
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name="users")
+@Table(name="user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,12 +36,11 @@ public class User {
 
     private String answer;
 
-    //private Date created_at;
-    private LocalDateTime created_at;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
-    @NotEmpty(message = "En az bir role seçilmelidir")
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles = new HashSet<>();
+    private LocalDateTime registrationTime;
 
     private double userStatistic;
 

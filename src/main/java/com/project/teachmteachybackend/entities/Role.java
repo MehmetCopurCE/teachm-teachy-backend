@@ -1,26 +1,17 @@
 package com.project.teachmteachybackend.entities;
 
+public enum Role {
+    ROLE_USER ("USER"),
+    ROLE_ADMIN ("ADMIN"),
+    ;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+    private final String value;
 
-@Data
-@Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "role")
-public class Role {
+    Role(String role) {
+        this.value = role;
+    }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    @Setter
-    private String roleName;
-
-    public Role(String roleName) {
-        this.roleName = roleName;
+    public String getValue(){
+        return this.value;
     }
 }
