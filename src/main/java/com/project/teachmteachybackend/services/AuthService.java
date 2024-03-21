@@ -52,8 +52,8 @@ public class AuthService {
 
         AuthResponse response = new AuthResponse();
         response.setUserId(user.get().getId());
-        response.setAccessToken(jwtToken);
-        response.setMessage("success");
+        response.setAccessToken("Bearer " + jwtToken);
+        response.setMessage("Successfully Login");
         return response;
     }
 

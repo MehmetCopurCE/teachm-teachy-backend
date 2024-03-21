@@ -25,9 +25,23 @@ public class JwtTokenProvider {
     }
 
     public Boolean validateToken(String token, JwtUserDetails userDetails) {
-        String username = extractUser(token);
-        Date expirationDate = extractExpiration(token);
-        return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+//        String username = extractUser(token);
+//        Date expirationDate = extractExpiration(token);
+//        return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .setAllowedClockSkewSeconds(5*60)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String username = claims.getSubject();
+            Date expirationDate = claims.getExpiration();
+            return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+        }catch (Exception e){
+            return false;
+        }
     }
 
     private Date extractExpiration(String token) {
