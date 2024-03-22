@@ -19,7 +19,8 @@ public class JwtTokenProvider {
     @Value("${project.app.secret}")
     private String APP_SECRET;
 
-    private final long  EXPIRE_IN = 604800;
+    //private final long  EXPIRE_IN = 604800;
+    private final long  EXPIRE_IN = 1800000;
 
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
@@ -33,7 +34,6 @@ public class JwtTokenProvider {
         try {
             Claims claims = Jwts.parserBuilder()
                     .setSigningKey(getSignKey())
-                    .setAllowedClockSkewSeconds(5*60)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
@@ -69,8 +69,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_IN))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + EXPIRE_IN))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
