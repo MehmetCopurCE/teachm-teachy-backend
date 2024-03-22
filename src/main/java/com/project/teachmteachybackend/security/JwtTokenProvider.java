@@ -19,15 +19,31 @@ public class JwtTokenProvider {
     @Value("${project.app.secret}")
     private String APP_SECRET;
 
+    //private final long  EXPIRE_IN = 604800;
+    private final long  EXPIRE_IN = 1800000;
+
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userName);
     }
 
     public Boolean validateToken(String token, JwtUserDetails userDetails) {
-        String username = extractUser(token);
-        Date expirationDate = extractExpiration(token);
-        return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+//        String username = extractUser(token);
+//        Date expirationDate = extractExpiration(token);
+//        return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+        try {
+            Claims claims = Jwts.parserBuilder()
+                    .setSigningKey(getSignKey())
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+
+            String username = claims.getSubject();
+            Date expirationDate = claims.getExpiration();
+            return userDetails.getUsername().equals(username) && !expirationDate.before(new Date());
+        }catch (Exception e){
+            return false;
+        }
     }
 
     private Date extractExpiration(String token) {
@@ -53,8 +69,8 @@ public class JwtTokenProvider {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(userName)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 2))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + EXPIRE_IN))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

@@ -1,19 +1,33 @@
 package com.project.teachmteachybackend.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
+import com.project.teachmteachybackend.dto.user.request.UserLoginRequest;
+import com.project.teachmteachybackend.dto.user.response.AuthResponse;
+import com.project.teachmteachybackend.services.AuthService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
 
-    @GetMapping("/login")
-    public String login(){
-        return "Login end point";
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
-    @GetMapping("/register")
-    public String register(){
-        return "Register end point";
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest){
+        return new ResponseEntity<>(authService.login(userLoginRequest), HttpStatus.OK);
+    }
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponse> register(@RequestBody @Valid UserCreateRequest request){
+        return authService.register(request);
     }
 }

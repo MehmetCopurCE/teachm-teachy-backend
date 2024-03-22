@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.security;
 
+import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
 import com.project.teachmteachybackend.services.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,6 +38,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
+
                 JwtUserDetails user = (JwtUserDetails) userDetailsService.loadUserByUsername(userName);
                 if(jwtTokenProvider.validateToken(token, user)){
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
@@ -45,7 +47,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
-            return;
+
+            throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
         }
         filterChain.doFilter(request,response);
     }

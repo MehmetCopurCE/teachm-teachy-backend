@@ -4,6 +4,7 @@ import com.project.teachmteachybackend.entities.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -12,9 +13,11 @@ import java.util.*;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User saveUser(UserCreateRequest createRequest) {
@@ -26,7 +29,7 @@ public class UserService {
         user.setEmail(createRequest.getEmail());
         user.setQuestion(createRequest.getQuestion());
         user.setAnswer(createRequest.getAnswer());
-        user.setRole(Role.ROLE_USER);
+        user.setRole(Role.USER);
         user.setUserStatistic(0.0);
         user.setRegistrationTime(LocalDateTime.now());
         return userRepository.save(user);
@@ -43,7 +46,7 @@ public class UserService {
     public Optional<User> updateUser(Long userId, UserCreateRequest createRequest) {
         return userRepository.findById(userId).map(existingUser -> {
             existingUser.setUsername(createRequest.getUsername());
-            existingUser.setPassword(createRequest.getPassword());
+            existingUser.setPassword(passwordEncoder.encode(createRequest.getPassword()));
             existingUser.setFirstName(createRequest.getFirstName());
             existingUser.setLastName(createRequest.getLastName());
             existingUser.setEmail(createRequest.getEmail());
@@ -63,5 +66,9 @@ public class UserService {
 
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElse(null);
+    }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username).orElse(null);
     }
 }
