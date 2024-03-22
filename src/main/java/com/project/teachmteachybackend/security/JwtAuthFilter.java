@@ -33,18 +33,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String userName = null;
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                System.out.println("authHeader boş değil");
                 token = authHeader.substring(7);
-                System.out.println("token: " + token);
                 userName = jwtTokenProvider.extractUser(token);
-                System.out.println("userName: " + userName);
             }
 
             if(userName != null && SecurityContextHolder.getContext().getAuthentication() == null){
 
                 JwtUserDetails user = (JwtUserDetails) userDetailsService.loadUserByUsername(userName);
                 if(jwtTokenProvider.validateToken(token, user)){
-                    System.out.println("İf in içerisine girdi");
                     UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                     auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(auth);
@@ -52,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }catch (Exception e){
 
-            throw new ServletException("doFilter da bir hata var: " + e);
+            throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
         }
         filterChain.doFilter(request,response);
     }

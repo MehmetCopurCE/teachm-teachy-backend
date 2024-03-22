@@ -26,7 +26,7 @@ public class UserService {
         user.setEmail(createRequest.getEmail());
         user.setQuestion(createRequest.getQuestion());
         user.setAnswer(createRequest.getAnswer());
-        user.setRole(Role.ROLE_USER);
+        user.setRole(Role.USER);
         user.setUserStatistic(0.0);
         user.setRegistrationTime(LocalDateTime.now());
         return userRepository.save(user);

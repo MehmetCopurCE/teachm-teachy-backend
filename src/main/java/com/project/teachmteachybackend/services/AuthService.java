@@ -6,6 +6,7 @@ import com.project.teachmteachybackend.dto.user.response.AuthResponse;
 import com.project.teachmteachybackend.entities.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
+import com.project.teachmteachybackend.exceptions.UserNotFoundException;
 import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.security.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class AuthService {
         Optional<User> user = userRepository.findByUsername(request.getUsername());
 
         if(user.isEmpty())
-            throw new InvalidCredentialsException("The username or password you entered is incorrect. Please try again.");
+            throw new UserNotFoundException("User not found with username:" + request.getUsername());
 
         if(!passwordEncoder.matches(request.getPassword(),user.get().getPassword()))
             throw new InvalidCredentialsException("The username or password you entered is incorrect. Please try again.");
@@ -72,7 +73,7 @@ public class AuthService {
         user.setLastName(request.getLastName());
         user.setQuestion(request.getQuestion());
         user.setAnswer(request.getAnswer());
-        user.setRole(Role.ROLE_USER);
+        user.setRole(Role.USER);
         user.setRegistrationTime(LocalDateTime.now());
         user.setUserStatistic(0.0);
 
