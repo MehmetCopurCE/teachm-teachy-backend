@@ -1,4 +1,4 @@
-package com.project.teachmteachybackend.entities;
+package com.project.teachmteachybackend.enums;
 
 public enum Role {
     USER ("USER"),
