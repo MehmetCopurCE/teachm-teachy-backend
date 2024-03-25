@@ -36,8 +36,8 @@ public class User {
     private Role role;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "account_privacy")
-    private AccountPrivacy accountPrivacy;
+    @Column(name = "account_type")
+    private AccountPrivacy accountType;
 
     private LocalDateTime registrationTime;
 
