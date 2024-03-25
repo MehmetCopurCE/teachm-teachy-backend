@@ -3,7 +3,7 @@ package com.project.teachmteachybackend.services;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import com.project.teachmteachybackend.dto.user.request.UserLoginRequest;
 import com.project.teachmteachybackend.dto.user.response.AuthResponse;
-import com.project.teachmteachybackend.entities.Role;
+import com.project.teachmteachybackend.enums.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
 import com.project.teachmteachybackend.exceptions.UserNotFoundException;

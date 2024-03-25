@@ -1,6 +1,6 @@
 package com.project.teachmteachybackend.services;
 
-import com.project.teachmteachybackend.entities.Role;
+import com.project.teachmteachybackend.enums.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
