@@ -26,7 +26,7 @@ public class Friendship {
     @JoinColumn(name = "user_id_1", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
-    private User user;
+    private User user1;
 
     //private Long user_id_2;
     @ManyToOne(fetch = FetchType.EAGER)
