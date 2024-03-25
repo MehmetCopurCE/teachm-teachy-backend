@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.services;
 
+import com.project.teachmteachybackend.enums.AccountPrivacy;
 import com.project.teachmteachybackend.enums.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.UserRepository;
@@ -30,6 +31,7 @@ public class UserService {
         user.setQuestion(createRequest.getQuestion());
         user.setAnswer(createRequest.getAnswer());
         user.setRole(Role.USER);
+        user.setAccountPrivacy(createRequest.getAccountPrivacy());
         user.setUserStatistic(0.0);
         user.setRegistrationTime(LocalDateTime.now());
         return userRepository.save(user);
@@ -52,6 +54,7 @@ public class UserService {
             existingUser.setEmail(createRequest.getEmail());
             existingUser.setQuestion(createRequest.getQuestion());
             existingUser.setAnswer(createRequest.getAnswer());
+            existingUser.setAccountPrivacy(createRequest.getAccountPrivacy());
             existingUser.setUserStatistic(existingUser.getUserStatistic());
             return userRepository.save(existingUser);
         });

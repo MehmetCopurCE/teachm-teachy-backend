@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.entities;
 
+import com.project.teachmteachybackend.enums.AccountPrivacy;
 import com.project.teachmteachybackend.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,6 +34,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_privacy")
+    private AccountPrivacy accountPrivacy;
 
     private LocalDateTime registrationTime;
 
