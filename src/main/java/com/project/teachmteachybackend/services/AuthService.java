@@ -74,6 +74,7 @@ public class AuthService {
         user.setQuestion(request.getQuestion());
         user.setAnswer(request.getAnswer());
         user.setRole(Role.USER);
+        user.setAccountType(request.getAccountPrivacy());
         user.setRegistrationTime(LocalDateTime.now());
         user.setUserStatistic(0.0);
 
