@@ -1,5 +1,7 @@
 package com.project.teachmteachybackend.entities;
 
+import com.project.teachmteachybackend.enums.AccountPrivacy;
+import com.project.teachmteachybackend.enums.FollowStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,4 +24,8 @@ public class Follow {
     private Long receiverId;
 
     private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private FollowStatus status;
 }

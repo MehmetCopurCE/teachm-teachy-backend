@@ -42,5 +42,4 @@ public class User {
     private LocalDateTime registrationTime;
 
     private double userStatistic;
-
 }
