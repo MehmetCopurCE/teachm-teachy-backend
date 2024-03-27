@@ -20,6 +20,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,15 +33,11 @@ public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private JwtAuthEntryPoint handler;
 
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter, PasswordEncoder passwordEncoder) {
+    public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter, PasswordEncoder passwordEncoder, JwtAuthEntryPoint handler) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Bean
-    public JwtAuthEntryPoint jwtAuthEntryPoint(){
-        return new JwtAuthEntryPoint();
+        this.handler = handler;
     }
 
     @Bean
@@ -50,7 +49,7 @@ public class SecurityConfig {
                             .anyRequest().authenticated()
 
                 )
-                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(jwtAuthEntryPoint()))
+                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(handler))
                 .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
