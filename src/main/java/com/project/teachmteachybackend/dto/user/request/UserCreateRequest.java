@@ -1,6 +1,7 @@
 package com.project.teachmteachybackend.dto.user.request;
 
 
+import com.project.teachmteachybackend.enums.AccountPrivacy;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
@@ -38,4 +39,6 @@ public class UserCreateRequest {
     @NotNull
     @NotBlank(message = "User question answer cannot be empty")
     private String answer;
+
+    private AccountPrivacy accountPrivacy = AccountPrivacy.PUBLIC;
 }

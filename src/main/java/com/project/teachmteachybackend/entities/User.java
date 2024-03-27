@@ -1,16 +1,11 @@
 package com.project.teachmteachybackend.entities;
 
+import com.project.teachmteachybackend.enums.AccountPrivacy;
+import com.project.teachmteachybackend.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Data
@@ -40,8 +35,11 @@ public class User {
     @Column(name = "role")
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "account_type")
+    private AccountPrivacy accountType;
+
     private LocalDateTime registrationTime;
 
     private double userStatistic;
-
 }

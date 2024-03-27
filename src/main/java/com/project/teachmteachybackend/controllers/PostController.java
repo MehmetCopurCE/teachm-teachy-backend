@@ -14,13 +14,13 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- ./posts
- ./posts?userId={userId}
- ./posts/{postId}
+ ./api/posts
+ ./api/posts?userId={userId}
+ ./api/posts/{postId}
  */
 
 @RestController
-@RequestMapping("/posts")
+@RequestMapping("/api/posts")
 public class PostController {
     private final PostService postService;
 

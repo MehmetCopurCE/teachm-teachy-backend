@@ -3,7 +3,7 @@ package com.project.teachmteachybackend.services;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import com.project.teachmteachybackend.dto.user.request.UserLoginRequest;
 import com.project.teachmteachybackend.dto.user.response.AuthResponse;
-import com.project.teachmteachybackend.entities.Role;
+import com.project.teachmteachybackend.enums.Role;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
 import com.project.teachmteachybackend.exceptions.UserNotFoundException;
@@ -74,6 +74,7 @@ public class AuthService {
         user.setQuestion(request.getQuestion());
         user.setAnswer(request.getAnswer());
         user.setRole(Role.USER);
+        user.setAccountType(request.getAccountPrivacy());
         user.setRegistrationTime(LocalDateTime.now());
         user.setUserStatistic(0.0);
 
