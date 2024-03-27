@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- ./posts
- ./posts?userId={userId}
- ./posts/{postId}
+ ./api/posts
+ ./api/posts?userId={userId}
+ ./api/posts/{postId}
  */
 
 @RestController

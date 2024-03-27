@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * ./users
- * ./users/{userId}
+ * ./api/users
+ * ./api/users/{userId}
  */
 
 @RestController

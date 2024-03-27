@@ -13,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ./comments
- * ./comments?userId={userId}
- * ./comments?postId={postId}
- * ./comments?userId={userId}&postId={postId}
- * ./comments/{commentId}
+ * ./api/comments
+ * ./api/comments?userId={userId}
+ * ./api/comments?postId={postId}
+ * ./api/comments?userId={userId}&postId={postId}
+ * ./api/comments/{commentId}
  */
 
 @RestController
