@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.config;
 
+import com.project.teachmteachybackend.security.JwtAuthEntryPoint;
 import com.project.teachmteachybackend.security.JwtAuthFilter;
 import com.project.teachmteachybackend.security.JwtTokenProvider;
 import com.project.teachmteachybackend.services.UserDetailsServiceImpl;
@@ -17,6 +18,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -26,11 +28,17 @@ public class SecurityConfig {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtAuthFilter jwtAuthFilter;
     private final PasswordEncoder passwordEncoder;
+    private JwtAuthEntryPoint handler;
 
     public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.jwtAuthFilter = jwtAuthFilter;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    @Bean
+    public JwtAuthEntryPoint jwtAuthEntryPoint(){
+        return new JwtAuthEntryPoint();
     }
 
     @Bean
@@ -40,7 +48,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(x ->
                     x.requestMatchers("/api/auth/login/**", "/api/auth/register/**").permitAll()
                             .anyRequest().authenticated()
-                ).sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                )
+                .httpBasic(httpBasic -> httpBasic.authenticationEntryPoint(jwtAuthEntryPoint()))
+                .sessionManagement(x -> x.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
