@@ -155,6 +155,12 @@ public class UserService {
     }
 
     public List<FollowResponse> getFriendRequests(Long userId) {
+        // Kullanıcının varlığını kontrol edin
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User cannot found with userId: " + userId); // Özel bir istisna fırlatarak hatayı anlamlandırın
+        }
+
         List<Follow> requestList = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.PENDING);
         return requestList.stream().map(FollowResponse::new).collect(Collectors.toList());
     }
@@ -195,13 +201,11 @@ public class UserService {
     }
 
     public List<FriendResponse> getFriendsById(Long userId) {
-        // Get all accepted follow requests for the user
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException();
+        }
         List<Follow> acceptedFollows = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.ACCEPTED);
-
-//        return  acceptedFollows.stream().map(follow -> {
-//            Optional<User> user = userRepository.findById(follow.getId());
-//            return new FriendResponse(user);
-//        }).collect(Collectors.toList());
 
         // Extract friend user IDs
         List<Long> friendIds = new ArrayList<>();
