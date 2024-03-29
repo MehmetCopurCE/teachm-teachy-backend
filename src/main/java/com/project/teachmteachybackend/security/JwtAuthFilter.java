@@ -25,6 +25,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    public JwtAuthEntryPoint jwtAuthEntryPoint(){
+        return new JwtAuthEntryPoint();
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
@@ -47,8 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
-
-            throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
+            //throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
         }
         filterChain.doFilter(request,response);
     }

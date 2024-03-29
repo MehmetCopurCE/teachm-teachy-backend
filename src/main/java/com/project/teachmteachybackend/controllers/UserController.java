@@ -52,9 +52,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        return userService.findUserById(userId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        return userService.findUserById(userId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı, userId: " + userId));
     }
+
+
 
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody @Valid UserCreateRequest createRequest) {
