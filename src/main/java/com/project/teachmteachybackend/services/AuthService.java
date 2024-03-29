@@ -5,8 +5,10 @@ import com.project.teachmteachybackend.dto.user.request.UserLoginRequest;
 import com.project.teachmteachybackend.dto.user.response.AuthResponse;
 import com.project.teachmteachybackend.enums.Role;
 import com.project.teachmteachybackend.entities.User;
+import com.project.teachmteachybackend.exceptions.ExistEmailException;
 import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
 import com.project.teachmteachybackend.exceptions.UserNotFoundException;
+import com.project.teachmteachybackend.exceptions.UsernameInUseException;
 import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.security.JwtTokenProvider;
 import org.springframework.http.HttpStatus;
@@ -35,11 +37,11 @@ public class AuthService {
         this.userRepository = userRepository;
     }
 
-    public AuthResponse login(UserLoginRequest request) {
+    public AuthResponse login(UserLoginRequest request) throws UserNotFoundException, InvalidCredentialsException{
         Optional<User> user = userRepository.findByUsername(request.getUsername());
 
         if(user.isEmpty())
-            throw new UserNotFoundException("User not found with username:" + request.getUsername());
+            throw new UserNotFoundException("User not found with username : " + request.getUsername());
 
         if(!passwordEncoder.matches(request.getPassword(),user.get().getPassword()))
             throw new InvalidCredentialsException("The username or password you entered is incorrect. Please try again.");
@@ -52,17 +54,20 @@ public class AuthService {
         String jwtToken = jwtTokenProvider.generateToken(request.getUsername());
 
         AuthResponse response = new AuthResponse();
+        response.setStatus(String.valueOf(HttpStatus.OK.value()));
         response.setUserId(user.get().getId());
         response.setAccessToken("Bearer " + jwtToken);
         response.setMessage("Successfully Login");
         return response;
     }
 
-    public ResponseEntity<AuthResponse> register(UserCreateRequest request) {
-        AuthResponse authResponse = new AuthResponse();
+    public ResponseEntity<AuthResponse> register(UserCreateRequest request) throws UsernameInUseException, ExistEmailException {
         if(userRepository.findByUsername(request.getUsername()).isPresent()){
-            authResponse.setMessage("Username already in use.");
-            return new ResponseEntity<>(authResponse, HttpStatus.BAD_REQUEST);
+            throw new UsernameInUseException("Username is in use : " + request.getUsername());
+        }
+
+        if(userRepository.findByEmail(request.getEmail()).isPresent()){
+            throw new ExistEmailException("Email is in use : " + request.getEmail());
         }
 
         User user = new User();
@@ -77,12 +82,14 @@ public class AuthService {
         user.setAccountType(request.getAccountPrivacy());
         user.setRegistrationTime(LocalDateTime.now());
         user.setUserStatistic(0.0);
-
         userRepository.save(user);
 
+        AuthResponse authResponse = new AuthResponse();
         authResponse.setMessage("Successfully registered!");
+        authResponse.setStatus(String.valueOf(HttpStatus.CREATED.value()));
         authResponse.setUserId(user.getId());
         authResponse.setAccessToken("");
+
         return new ResponseEntity<>(authResponse, HttpStatus.CREATED);
     };
 }

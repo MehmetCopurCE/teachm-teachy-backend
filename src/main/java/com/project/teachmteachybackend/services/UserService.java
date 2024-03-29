@@ -33,21 +33,21 @@ public class UserService {
         this.followRepository = followRepository;
     }
     /** ------------- User Management ------------- */
-    public User saveUser(UserCreateRequest createRequest) {
-        User user = new User();
-        user.setUsername(createRequest.getUsername());
-        user.setPassword(createRequest.getPassword());
-        user.setFirstName(createRequest.getFirstName());
-        user.setLastName(createRequest.getLastName());
-        user.setEmail(createRequest.getEmail());
-        user.setQuestion(createRequest.getQuestion());
-        user.setAnswer(createRequest.getAnswer());
-        user.setRole(Role.USER);
-        user.setAccountType(createRequest.getAccountPrivacy());
-        user.setUserStatistic(0.0);
-        user.setRegistrationTime(LocalDateTime.now());
-        return userRepository.save(user);
-    }
+//    public User saveUser(UserCreateRequest createRequest) {
+//        User user = new User();
+//        user.setUsername(createRequest.getUsername());
+//        user.setPassword(createRequest.getPassword());
+//        user.setFirstName(createRequest.getFirstName());
+//        user.setLastName(createRequest.getLastName());
+//        user.setEmail(createRequest.getEmail());
+//        user.setQuestion(createRequest.getQuestion());
+//        user.setAnswer(createRequest.getAnswer());
+//        user.setRole(Role.USER);
+//        user.setAccountType(createRequest.getAccountPrivacy());
+//        user.setUserStatistic(0.0);
+//        user.setRegistrationTime(LocalDateTime.now());
+//        return userRepository.save(user);
+//    }
 
     public List<User> getAllUsers() {
         return userRepository.findAll();

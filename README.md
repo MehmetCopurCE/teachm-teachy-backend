@@ -15,7 +15,6 @@ Teachm-Teachy, ... (uygulamanızın kısa bir açıklaması)
 
 | Name                  | URL               | Method | Description                        |
 |-----------------------|-------------------|--------|------------------------------------|
-| **Create User**       | `/api/users`      | POST   | Creates a new user.                |
 | **List Users**        | `/api/users`      | GET    | Lists all users.                   |
 | **Get User By Id**    | `/api/users/{id}` | GET    | Gets a user with a specific ID.    |
 | **Update User By Id** | `/api/users/{id}` | PUT    | Updates a user with a specific ID. |

@@ -22,11 +22,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException ex) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
-        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.toString());
+        errorResponse.setStatus(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()));
         errorResponse.setError(ex.getClass().getSimpleName());
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(InvalidCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialsException(InvalidCredentialsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date());
+        errorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        errorResponse.setError(ex.getClass().getSimpleName());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
@@ -34,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(String.valueOf(HttpStatus.NOT_FOUND.value()));
-        errorResponse.setError("User not found");
+        errorResponse.setError(ex.getClass().getSimpleName());
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
@@ -45,8 +56,32 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setTimestamp(new Date());
         errorResponse.setStatus(String.valueOf(HttpStatus.FOUND.value()));
-        errorResponse.setError("Found a friend request");
+        errorResponse.setError(ex.getClass().getSimpleName());
         errorResponse.setMessage(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.FOUND);
     }
+
+    @ExceptionHandler(UsernameInUseException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameInUseException(UsernameInUseException ex) {
+        // ErrorResponse nesnesini oluşturun
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date());
+        errorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        errorResponse.setError(ex.getClass().getSimpleName());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExistEmailException.class)
+    public ResponseEntity<ErrorResponse> handleExistEmailException(ExistEmailException ex) {
+        // ErrorResponse nesnesini oluşturun
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date());
+        errorResponse.setStatus(String.valueOf(HttpStatus.BAD_REQUEST.value()));
+        errorResponse.setError(ex.getClass().getSimpleName());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+
 }

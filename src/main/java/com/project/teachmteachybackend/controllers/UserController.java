@@ -37,14 +37,14 @@ public class UserController {
     /**
      * ------------- User Management -------------
      */
-    @PostMapping()
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest createRequest, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
-        }
-        User savedUser = userService.saveUser(createRequest);
-        return ResponseEntity.ok(savedUser);
-    }
+//    @PostMapping()
+//    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest createRequest, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+//        }
+//        User savedUser = userService.saveUser(createRequest);
+//        return ResponseEntity.ok(savedUser);
+//    }
 
     @GetMapping
     public List<User> getAllUsers() {
