@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtTokenProvider jwtTokenProvider;
@@ -24,6 +23,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     public JwtAuthFilter(JwtTokenProvider jwtTokenProvider, UserDetailsServiceImpl userDetailsService) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userDetailsService = userDetailsService;
+    }
+
+    public JwtAuthEntryPoint jwtAuthEntryPoint(){
+        return new JwtAuthEntryPoint();
     }
 
     @Override
@@ -48,8 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         }catch (Exception e){
-
-            throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
+            //throw new ServletException("JwtAuthFilter - doFilter da bir hata var: " + e);
         }
         filterChain.doFilter(request,response);
     }
