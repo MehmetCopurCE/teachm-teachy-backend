@@ -12,6 +12,7 @@ import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.LikeRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostService postService;
     private final UserService userService;
-    private Post post;
+
 
     public LikeService(LikeRepository likeRepository, PostService postService, UserService userService) {
         this.likeRepository = likeRepository;
@@ -52,38 +53,29 @@ public class LikeService {
 
     }
 
-    //Todo// Burada sonsuz döngüye sokmuşsun bu çalışmaz bide bi yerde kullanmamışsın. Bunu silebilirsin
-        public static Post convertToPost(PostResponse postResponse) {
 
-            Post post = convertToPost(postResponse);
-            return post;
-        }
-    
 
 
     public Like createOneLike(LikeCreateRequest request) {
         User user = userService.getUserById(request.getUserId());
         PostResponse postResponse = postService.getPostById(request.getPostId());
 
-        if(user != null && postResponse != null) {
+        if (user != null && postResponse != null) {
             Like likeToSave = new Like();
             likeToSave.setId(request.getId());
-            //Todo// buradaki post boş, sayfanın en başında tanımladığın post objesi bu
-            //Todo// Onun yerine üstteki postResponse objesini post ta çevirip onu vermelisin
-            /**
-             örnek:
-             Post post = new Post();
-             post.setId(postResponse.getId());
-             post.setTitle(postResponse.getTitle());
-             post.setContent(postResponse.getContent());
-             post.setUser(user);
-             post.setCreated_at(LocalDateTime.now());
-             */
-            likeToSave.setPost(post);
+            Post post = new Post();
+            post .setId(postResponse.getId());
+            post.setTitle(postResponse.getTitle());
+            post.setContent(postResponse.getContent());
+            post.setCreated_at(LocalDateTime.now());
+            post.setUser(user);
+
             likeToSave.setUser(user);
+            likeToSave.setPost(post);
             return likeRepository.save(likeToSave);
-        }else
+        } else {
             return null;
+        }
     }
 
 
@@ -92,10 +84,8 @@ public class LikeService {
         likeRepository.deleteById(likeId);
     }
 
-
     public void getOneLikeById(Long likeId) {
-        //Todo
-        //Todo// getById yerine findById methodu kullanılacak
-        likeRepository.getById(likeId);
+
+        likeRepository.findById(likeId);
     }
 }
