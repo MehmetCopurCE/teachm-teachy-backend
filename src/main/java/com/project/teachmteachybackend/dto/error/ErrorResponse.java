@@ -1,4 +1,4 @@
-package com.project.teachmteachybackend.exceptions;
+package com.project.teachmteachybackend.dto.error;
 
 import lombok.Data;
 
