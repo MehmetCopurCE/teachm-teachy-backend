@@ -84,8 +84,8 @@ public class LikeService {
         likeRepository.deleteById(likeId);
     }
 
-    public void getOneLikeById(Long likeId) {
+    public Optional<Like> getOneLikeById(Long likeId) {
 
-        likeRepository.findById(likeId);
+        return likeRepository.findById(likeId);
     }
 }

@@ -32,8 +32,8 @@ import java.util.Optional;
         }
 
         @GetMapping("/{likeId}")
-        public void getOneLike(@PathVariable Long likeId) {
-            likeService.getOneLikeById(likeId);
+        public Optional<Like> getOneLike(@PathVariable Long likeId) {
+            return likeService.getOneLikeById(likeId);
         }
 
         @DeleteMapping("/{likeId}")
