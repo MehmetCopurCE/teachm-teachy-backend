@@ -10,10 +10,12 @@ import com.project.teachmteachybackend.exceptions.FriendRequestNotFoundException
 import com.project.teachmteachybackend.exceptions.UserNotFoundException;
 import com.project.teachmteachybackend.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -35,14 +37,14 @@ public class UserController {
     /**
      * ------------- User Management -------------
      */
-    @PostMapping()
-    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest createRequest, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
-        }
-        User savedUser = userService.saveUser(createRequest);
-        return ResponseEntity.ok(savedUser);
-    }
+//    @PostMapping()
+//    public ResponseEntity<?> createUser(@RequestBody @Valid UserCreateRequest createRequest, BindingResult bindingResult) {
+//        if (bindingResult.hasErrors()) {
+//            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+//        }
+//        User savedUser = userService.saveUser(createRequest);
+//        return ResponseEntity.ok(savedUser);
+//    }
 
     @GetMapping
     public List<User> getAllUsers() {
@@ -50,9 +52,13 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        return userService.findUserById(userId).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getUserById(@PathVariable Long userId) {
+        return userService.findUserById(userId)
+                .map(ResponseEntity::ok)
+                .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı, userId: " + userId));
     }
+
+
 
     @PutMapping("/{userId}")
     public ResponseEntity<User> updateUser(@PathVariable Long userId, @RequestBody @Valid UserCreateRequest createRequest) {
@@ -99,11 +105,15 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/friend-requests")
-    public ResponseEntity<List<FollowResponse>> getFriendRequests(@PathVariable Long userId) {
-        List<FollowResponse> requestsList = userService.getFriendRequests(userId);
-        return ResponseEntity.ok(requestsList);
+    public ResponseEntity<?> getFriendRequests(@PathVariable Long userId) {
+        try {
+            List<FollowResponse> requestsList = userService.getFriendRequests(userId);
+            return ResponseEntity.ok(requestsList);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", "User not found"));
+        }
     }
-
     @PostMapping("/{userId}/accept-friend-request")
     public ResponseEntity<?> acceptFriendRequest(@PathVariable Long userId, @RequestParam Long senderId) {
         try {
@@ -137,20 +147,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/friends")
-    public ResponseEntity<List<FriendResponse>> getFriends(@PathVariable Long userId) {
-        List<FriendResponse> friendList = userService.getFriendsById(userId);
-//        List<Long> friendIds = new ArrayList<>();
-//        for (Follow follow : followList) {
-//            if (follow.getSenderId().equals(userId)) {
-//                friendIds.add(follow.getReceiverId());
-//            } else {
-//                friendIds.add(follow.getSenderId());
-//            }
-//        }
-//        List<User> friends = userRepository.findAllById(friendIds);
-//        return ResponseEntity.ok(friends);
-        return ResponseEntity.ok(friendList);
-
+    public ResponseEntity<?> getFriends(@PathVariable Long userId) {
+        try {
+            List<FriendResponse> friendList = userService.getFriendsById(userId);
+            return ResponseEntity.ok(friendList);
+        } catch (UserNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Collections.singletonMap("error", "User not found"));
+        }
     }
 
 
