@@ -12,6 +12,7 @@ import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.LikeRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostService postService;
     private final UserService userService;
-    private Post post;
+
 
     public LikeService(LikeRepository likeRepository, PostService postService, UserService userService) {
         this.likeRepository = likeRepository;
@@ -61,6 +62,14 @@ public class LikeService {
 
         if (user != null && postResponse != null) {
             Like likeToSave = new Like();
+            likeToSave.setId(request.getId());
+            Post post = new Post();
+            post .setId(postResponse.getId());
+            post.setTitle(postResponse.getTitle());
+            post.setContent(postResponse.getContent());
+            post.setCreated_at(LocalDateTime.now());
+            post.setUser(user);
+
             likeToSave.setUser(user);
             likeToSave.setPost(post);
             return likeRepository.save(likeToSave);
@@ -74,7 +83,6 @@ public class LikeService {
     public void deleteOneLikeById(Long likeId) {
         likeRepository.deleteById(likeId);
     }
-
 
     public void getOneLikeById(Long likeId) {
 
