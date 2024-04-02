@@ -205,16 +205,19 @@ public class UserService {
         if (user.isEmpty()) {
             throw new UserNotFoundException();
         }
-        List<Follow> acceptedFollows = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.ACCEPTED);
+        List<Follow> acceptedFollowsSent = followRepository.findBySenderIdAndStatus(userId, FollowStatus.ACCEPTED);
+        List<Follow> acceptedFollowsReceived = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.ACCEPTED);
 
-        // Extract friend user IDs
-        List<Long> friendIds = new ArrayList<>();
-        for (Follow follow : acceptedFollows) {
+        Set<Long> friendIds = new HashSet<>();
+        for (Follow follow : acceptedFollowsSent) {
+            friendIds.add(follow.getReceiverId());
+        }
+        for (Follow follow : acceptedFollowsReceived) {
             friendIds.add(follow.getSenderId());
         }
 
         // Retrieve friend user objects
         return userRepository.findAllById(friendIds).stream().map(FriendResponse::new).collect(Collectors.toList());
-
     }
+
 }
