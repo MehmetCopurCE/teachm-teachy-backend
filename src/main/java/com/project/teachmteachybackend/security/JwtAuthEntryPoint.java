@@ -1,7 +1,7 @@
 package com.project.teachmteachybackend.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.teachmteachybackend.exceptions.ErrorResponse;
+import com.project.teachmteachybackend.dto.error.ErrorResponse;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

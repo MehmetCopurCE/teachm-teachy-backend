@@ -93,9 +93,12 @@ public class UserService {
 
     /** ------------- Friendship Management ------------- */
     public void sendFriendRequest(Long userId, Long friendId) throws UserNotFoundException, FriendRequestExistsException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı."));
-        User friend = userRepository.findById(friendId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with " + userId + " ID."));
+        User friend = userRepository.findById(friendId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with " + friendId + " ID."));
 
+        if (userId.equals(friendId)){
+            return;
+        }
         if(isFriend(user, friend)){
             throw new FriendRequestException("Friend already followed");
         }
@@ -205,16 +208,19 @@ public class UserService {
         if (user.isEmpty()) {
             throw new UserNotFoundException();
         }
-        List<Follow> acceptedFollows = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.ACCEPTED);
+        List<Follow> acceptedFollowsSent = followRepository.findBySenderIdAndStatus(userId, FollowStatus.ACCEPTED);
+        List<Follow> acceptedFollowsReceived = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.ACCEPTED);
 
-        // Extract friend user IDs
-        List<Long> friendIds = new ArrayList<>();
-        for (Follow follow : acceptedFollows) {
+        Set<Long> friendIds = new HashSet<>();
+        for (Follow follow : acceptedFollowsSent) {
+            friendIds.add(follow.getReceiverId());
+        }
+        for (Follow follow : acceptedFollowsReceived) {
             friendIds.add(follow.getSenderId());
         }
 
         // Retrieve friend user objects
         return userRepository.findAllById(friendIds).stream().map(FriendResponse::new).collect(Collectors.toList());
-
     }
+
 }

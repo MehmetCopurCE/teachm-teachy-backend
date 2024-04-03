@@ -1,6 +1,6 @@
 package com.project.teachmteachybackend.exceptions;
 
-import jakarta.servlet.http.HttpServletResponse;
+import com.project.teachmteachybackend.dto.error.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
