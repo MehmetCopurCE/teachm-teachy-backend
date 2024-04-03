@@ -93,9 +93,12 @@ public class UserService {
 
     /** ------------- Friendship Management ------------- */
     public void sendFriendRequest(Long userId, Long friendId) throws UserNotFoundException, FriendRequestExistsException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı."));
-        User friend = userRepository.findById(friendId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı."));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with " + userId + " ID."));
+        User friend = userRepository.findById(friendId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with " + friendId + " ID."));
 
+        if (userId.equals(friendId)){
+            return;
+        }
         if(isFriend(user, friend)){
             throw new FriendRequestException("Friend already followed");
         }
