@@ -83,7 +83,7 @@ public class UserController {
         try {
             userService.sendFriendRequest(userId, friendId);
             return ResponseEntity.ok().body(
-                    Map.of("success", true, "message", "Arkadaşlık isteği gönderildi.")
+                    Map.of("success", true, "message", "Friend request sent successfully.")
             );
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(404).body(
