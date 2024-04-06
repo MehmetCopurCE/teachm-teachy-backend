@@ -87,7 +87,7 @@ public class UserController {
             );
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(404).body(
-                    Map.of("success", false, "message", "Kullanıcı bulunamadı.")
+                    Map.of("success", false, "message", "User not found.")
             );
         } catch (FriendRequestExistsException e) {
             return ResponseEntity.status(409).body(
