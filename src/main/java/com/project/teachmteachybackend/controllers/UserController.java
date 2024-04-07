@@ -99,7 +99,7 @@ public class UserController {
             );
         } catch (Exception e) {
             return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "Arkadaşlık isteği gönderilemedi.")
+                    Map.of("success", false, "message", "Friend request could not send.")
             );
         }
     }
