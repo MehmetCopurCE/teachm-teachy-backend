@@ -91,7 +91,7 @@ public class UserController {
             );
         } catch (FriendRequestExistsException e) {
             return ResponseEntity.status(409).body(
-                    Map.of("success", false, "message", "Zaten bir arkadaşlık isteği mevcut veya kullanıcılar zaten arkadaş.")
+                    Map.of("success", false, "message", "There already exist a friend request or they are already friends.")
             );
         } catch (FriendRequestException e) {
             return ResponseEntity.status(400).body(
