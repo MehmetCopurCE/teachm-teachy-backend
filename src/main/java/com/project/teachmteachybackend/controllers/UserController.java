@@ -95,7 +95,7 @@ public class UserController {
             );
         } catch (FriendRequestException e) {
             return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "Kullanıcı zaten takip ediliyor")
+                    Map.of("success", false, "message", "User already followed.")
             );
         } catch (Exception e) {
             return ResponseEntity.status(400).body(
