@@ -83,23 +83,23 @@ public class UserController {
         try {
             userService.sendFriendRequest(userId, friendId);
             return ResponseEntity.ok().body(
-                    Map.of("success", true, "message", "Arkadaşlık isteği gönderildi.")
+                    Map.of("success", true, "message", "Friend request sent successfully.")
             );
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(404).body(
-                    Map.of("success", false, "message", "Kullanıcı bulunamadı.")
+                    Map.of("success", false, "message", "User not found.")
             );
         } catch (FriendRequestExistsException e) {
             return ResponseEntity.status(409).body(
-                    Map.of("success", false, "message", "Zaten bir arkadaşlık isteği mevcut veya kullanıcılar zaten arkadaş.")
+                    Map.of("success", false, "message", "There already exist a friend request or they are already friends.")
             );
         } catch (FriendRequestException e) {
             return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "Kullanıcı zaten takip ediliyor")
+                    Map.of("success", false, "message", "User already followed.")
             );
         } catch (Exception e) {
             return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "Arkadaşlık isteği gönderilemedi.")
+                    Map.of("success", false, "message", "Friend request could not send.")
             );
         }
     }
