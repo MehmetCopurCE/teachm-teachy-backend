@@ -9,5 +9,5 @@ public class AuthResponse {
     String status;
     String message;
     String accessToken;
-    //String refreshToken;
+    String refreshToken;
 }
