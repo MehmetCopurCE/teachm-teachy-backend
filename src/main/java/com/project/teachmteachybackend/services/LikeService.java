@@ -13,6 +13,7 @@ import com.project.teachmteachybackend.repositories.LikeRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 import java.util.List;
 
@@ -67,7 +68,7 @@ public class LikeService {
             post .setId(postResponse.getId());
             post.setTitle(postResponse.getTitle());
             post.setContent(postResponse.getContent());
-            post.setCreated_at(LocalDateTime.now());
+            post.setCreated_at(new Date());
             post.setUser(user);
 
             likeToSave.setUser(user);

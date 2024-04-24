@@ -43,7 +43,7 @@ public class PostService {
         toSave.setUser(user);
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
-        toSave.setCreated_at(LocalDateTime.now());
+        toSave.setCreated_at(new Date());
         return new PostResponse(postRepository.save(toSave));
     }
 

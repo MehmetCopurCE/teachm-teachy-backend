@@ -16,7 +16,7 @@ public class PostResponse {
     private String title;
     private String content;
     //private Date createdAt;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     public PostResponse(Post entity){
         this.id = entity.getId();

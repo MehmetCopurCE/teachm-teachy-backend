@@ -37,7 +37,7 @@ public class CommentService {
             toSave.setUser(user);
             toSave.setPost(postResponse.toPost(userService));
             //toSave.setCreated_at(new Date());
-            toSave.setCreated_at(LocalDateTime.now());
+            toSave.setCreated_at(new Date());
             return new CommentResponse(commentRepository.save(toSave));
         }
         return null;
