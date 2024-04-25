@@ -1,6 +1,5 @@
 package com.project.teachmteachybackend.services;
 
-
 import com.project.teachmteachybackend.dto.like.request.LikeCreateRequest;
 
 import com.project.teachmteachybackend.dto.like.response.LikeResponse;
@@ -10,6 +9,7 @@ import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.entities.User;
 
 import com.project.teachmteachybackend.repositories.LikeRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -19,21 +19,16 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-
-
-
-
-
-
 @Service
 public class LikeService {
 
     private final LikeRepository likeRepository;
+    @Lazy
     private final PostService postService;
     private final UserService userService;
 
 
-    public LikeService(LikeRepository likeRepository, PostService postService, UserService userService) {
+    public LikeService(LikeRepository likeRepository,@Lazy PostService postService, UserService userService) {
         this.likeRepository = likeRepository;
         this.postService = postService;
         this.userService = userService;
@@ -63,7 +58,6 @@ public class LikeService {
 
         if (user != null && postResponse != null) {
             Like likeToSave = new Like();
-            likeToSave.setId(request.getId());
             Post post = new Post();
             post .setId(postResponse.getId());
             post.setTitle(postResponse.getTitle());

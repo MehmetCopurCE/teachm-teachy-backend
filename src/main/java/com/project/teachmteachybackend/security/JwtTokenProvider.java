@@ -19,8 +19,8 @@ public class JwtTokenProvider {
     @Value("${project.app.secret}")
     private String APP_SECRET;
 
-    private final long  EXPIRE_IN = 120000;           // 2 dk
-    //private final long  EXPIRE_IN = 1800000;        // 30 dk
+    //private final long  EXPIRE_IN = 120000;           // 2 dk
+    private final long  EXPIRE_IN = 1800000;        // 30 dk
 
     public String generateToken(String userName) {
         Map<String, Object> claims = new HashMap<>();

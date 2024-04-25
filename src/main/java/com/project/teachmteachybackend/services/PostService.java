@@ -1,15 +1,17 @@
 package com.project.teachmteachybackend.services;
 
 
+import com.project.teachmteachybackend.dto.like.response.LikeResponse;
 import com.project.teachmteachybackend.dto.post.response.PostResponse;
+import com.project.teachmteachybackend.entities.Like;
 import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.entities.User;
+import com.project.teachmteachybackend.repositories.LikeRepository;
 import com.project.teachmteachybackend.repositories.PostRepository;
 import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -17,13 +19,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class PostService {
-    private final PostRepository postRepository;
-    private final UserService userService;
+    private PostRepository postRepository;
+    private UserService userService;
+    private LikeService likeService;
+    private final LikeRepository likeRepository;
 
-    public PostService(PostRepository postRepository, UserService userService) {
+    public PostService(PostRepository postRepository, UserService userService, LikeService likeService, LikeRepository likeRepository) {
         this.postRepository = postRepository;
         this.userService = userService;
+        this.likeService = likeService;
+        this.likeRepository = likeRepository;
     }
+
 
     public List<PostResponse> getAllPosts(Optional<Long> userId) {
         List<Post> list;
@@ -31,7 +38,9 @@ public class PostService {
             list = postRepository.findByUser_Id(userId);
         else
             list = postRepository.findAll();
-        return list.stream().map(PostResponse::new).collect(Collectors.toList());
+        return list.stream().map(post -> {
+            List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(post.getId()));
+            return new PostResponse(post, likes);}).collect(Collectors.toList());
     }
 
     public PostResponse createPost(PostCreateRequest createRequest) {
@@ -44,21 +53,39 @@ public class PostService {
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
         toSave.setCreated_at(new Date());
-        return new PostResponse(postRepository.save(toSave));
+        Post savedPost = postRepository.save(toSave);
+
+        // Fetch the likes for the post and convert them into LikeResponse objects
+        List<Like> likes = likeRepository.findByPostId(Optional.ofNullable(savedPost.getId()));
+        List<LikeResponse> likeResponses = likes.stream()
+                .map(like -> new LikeResponse(like))
+                .collect(Collectors.toList());
+
+        return new PostResponse(savedPost, likeResponses);
     }
 
     public PostResponse getPostById(Long postId) {
         Post post = postRepository.findById(postId).orElse(null);
-        return (post != null) ? new PostResponse(post) : null;
+        List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(postId));
+        return (post != null) ? new PostResponse(post, likes) : null;
     }
 
     public Optional<PostResponse> updatePost(Long postId, PostUpdateRequest updateRequest) {
-        return postRepository.findById(postId).map(existingPost ->{
+        return postRepository.findById(postId).map(existingPost -> {
             existingPost.setTitle(updateRequest.getTitle());
             existingPost.setContent(updateRequest.getContent());
-            return new PostResponse(postRepository.save(existingPost));
+            Post updatedPost = postRepository.save(existingPost);
+
+            // Fetch the likes for the post and convert them into LikeResponse objects
+            List<Like> likes = likeRepository.findByPostId(Optional.ofNullable(updatedPost.getId()));
+            List<LikeResponse> likeResponses = likes.stream()
+                    .map(like -> new LikeResponse(like))
+                    .collect(Collectors.toList());
+
+            return new PostResponse(updatedPost, likeResponses);
         });
     }
+
 
     public boolean deletePost(Long postId) {
         return postRepository.findById(postId).map(post -> {

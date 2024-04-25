@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.dto.post.response;
 
+import com.project.teachmteachybackend.dto.like.response.LikeResponse;
 import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.services.UserService;
@@ -7,6 +8,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class PostResponse {
@@ -17,14 +19,16 @@ public class PostResponse {
     private String content;
     //private Date createdAt;
     private Date createdAt;
+    private List<LikeResponse> postLikes;
 
-    public PostResponse(Post entity){
+    public PostResponse(Post entity, List<LikeResponse> postLikes){
         this.id = entity.getId();
         this.userId = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.createdAt = entity.getCreated_at();
+        this.postLikes = postLikes;
     }
 
     public Post toPost(UserService userService){
