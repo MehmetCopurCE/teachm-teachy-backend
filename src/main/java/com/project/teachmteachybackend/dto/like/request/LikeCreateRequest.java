@@ -7,12 +7,7 @@ import lombok.Setter;
 @Data
 @Getter
 @Setter
-
 public class LikeCreateRequest {
-
-    private Long id;
    private Long userId;
    private Long postId;
-
-
 }

@@ -1,7 +1,6 @@
 package com.project.teachmteachybackend.controllers;
 
 import com.project.teachmteachybackend.dto.post.response.PostResponse;
-import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import com.project.teachmteachybackend.services.PostService;

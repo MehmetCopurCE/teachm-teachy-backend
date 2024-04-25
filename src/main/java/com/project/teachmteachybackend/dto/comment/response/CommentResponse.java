@@ -18,7 +18,7 @@ public class CommentResponse {
     private Long postId;
     private String content;
     //private Date createdAt;
-    private LocalDateTime createdAt;
+    private Date createdAt;
 
     public CommentResponse(Comment entity){
         this.id = entity.getId();

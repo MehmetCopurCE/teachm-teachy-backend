@@ -40,7 +40,8 @@ public class Post {
     private String content;
 
     //private Date created_at;
-    private LocalDateTime created_at;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date created_at;
 }
 
 /*
