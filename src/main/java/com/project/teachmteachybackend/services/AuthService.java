@@ -45,6 +45,7 @@ public class AuthService {
     }
 
     public AuthResponse login(UserLoginRequest request) throws UserNotFoundException, InvalidCredentialsException{
+
         Optional<User> user = userRepository.findByUsername(request.getUsername());
 
         if(user.isEmpty())
