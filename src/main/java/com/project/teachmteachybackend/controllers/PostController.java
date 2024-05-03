@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.controllers;
 
+import com.project.teachmteachybackend.dto.post.request.RepostCreateRequest;
 import com.project.teachmteachybackend.dto.post.response.PostResponse;
 import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
@@ -43,6 +44,16 @@ public class PostController {
             return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
         }
         PostResponse postResponse =  postService.createPost(postCreateRequest);
+        return ResponseEntity.ok(postResponse);
+    }
+
+    @PostMapping("/repost")
+    public ResponseEntity<?> createRePost(@RequestBody @Valid RepostCreateRequest repostCreateRequest, BindingResult bindingResult){
+        //return new ResponseEntity<>(postService.createPost(post), HttpStatus.CREATED);
+        if(bindingResult.hasErrors()){
+            return ResponseEntity.badRequest().body(bindingResult.getAllErrors());
+        }
+        PostResponse postResponse =  postService.createRePost(repostCreateRequest);
         return ResponseEntity.ok(postResponse);
     }
 
