@@ -2,7 +2,9 @@ package com.project.teachmteachybackend.services;
 
 
 import com.project.teachmteachybackend.dto.like.response.LikeResponse;
+import com.project.teachmteachybackend.dto.post.request.RepostCreateRequest;
 import com.project.teachmteachybackend.dto.post.response.PostResponse;
+import com.project.teachmteachybackend.dto.post.response.RepostResponse;
 import com.project.teachmteachybackend.entities.Like;
 import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.entities.User;
@@ -34,18 +36,24 @@ public class PostService {
 
     public List<PostResponse> getAllPosts(Optional<Long> userId) {
         List<Post> list;
-        if(userId.isPresent())
+        if (userId.isPresent())
             list = postRepository.findByUser_Id(userId);
         else
             list = postRepository.findAll();
         return list.stream().map(post -> {
             List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(post.getId()));
-            return new PostResponse(post, likes);}).collect(Collectors.toList());
+            if (post.isRepost()) {
+                Post originPost = postRepository.findById(post.getOriginalPost().getId()).orElse(null);
+                RepostResponse repostResponse = new RepostResponse(Optional.of(originPost));
+                return new PostResponse(post, likes, repostResponse);
+            }
+            return new PostResponse(post, likes, null);
+        }).collect(Collectors.toList());
     }
 
     public PostResponse createPost(PostCreateRequest createRequest) {
         User user = userService.getUserById(createRequest.getUserId());
-        if(user == null)
+        if (user == null)
             return null; //TODO Burada bir hata mesajıda dönderebilirsin
 
         Post toSave = new Post();
@@ -53,21 +61,60 @@ public class PostService {
         toSave.setTitle(createRequest.getTitle());
         toSave.setContent(createRequest.getContent());
         toSave.setCreated_at(new Date());
+        toSave.setRepost(false);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
+        toSave.setOriginalPost(null);
         Post savedPost = postRepository.save(toSave);
 
         // Fetch the likes for the post and convert them into LikeResponse objects
         List<Like> likes = likeRepository.findByPostId(Optional.ofNullable(savedPost.getId()));
         List<LikeResponse> likeResponses = likes.stream()
-                .map(like -> new LikeResponse(like))
+                .map(LikeResponse::new)
                 .collect(Collectors.toList());
 
-        return new PostResponse(savedPost, likeResponses);
+        return new PostResponse(savedPost, likeResponses, null);
+    }
+
+    public PostResponse createRePost(RepostCreateRequest repostCreateRequest) {
+        User user = userService.getUserById(repostCreateRequest.getUserId());
+        if (user == null)
+            return null; //TODO Burada bir hata mesajıda dönderebilirsin
+
+        Post post = postRepository.findById(repostCreateRequest.getOriginalPostId()).orElse(null);
+        if (post == null)
+            return null; //TODO Burada bir hata mesajıda dönderebilirsin
+
+        Post toSave = new Post();
+        toSave.setUser(user);
+        toSave.setTitle(repostCreateRequest.getTitle());
+        toSave.setContent(repostCreateRequest.getContent());
+        toSave.setCreated_at(new Date());
+        toSave.setRepost(true);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
+        toSave.setOriginalPost(post);
+        Post savedPost = postRepository.save(toSave);
+
+        // Fetch the likes for the post and convert them into LikeResponse objects
+        List<Like> likes = likeRepository.findByPostId(Optional.ofNullable(savedPost.getId()));
+        List<LikeResponse> likeResponses = likes.stream()
+                .map(LikeResponse::new)
+                .collect(Collectors.toList());
+
+        RepostResponse repostResponse = new RepostResponse(Optional.of(post));
+        return new PostResponse(savedPost, likeResponses, repostResponse);
+
     }
 
     public PostResponse getPostById(Long postId) {
         Post post = postRepository.findById(postId).orElse(null);
+
+        if(post == null)
+            return null;
         List<LikeResponse> likes = likeService.getAllLikesWithParam(Optional.ofNullable(null), Optional.of(postId));
-        return (post != null) ? new PostResponse(post, likes) : null;
+        if(post.isRepost()){
+            Post originPost = postRepository.findById(post.getOriginalPost().getId()).orElse(null);
+            RepostResponse repostResponse = new RepostResponse(Optional.ofNullable(originPost));
+            return new PostResponse(post, likes, repostResponse);
+        }
+        return  new PostResponse(post, likes, null);
     }
 
     public Optional<PostResponse> updatePost(Long postId, PostUpdateRequest updateRequest) {
@@ -82,7 +129,9 @@ public class PostService {
                     .map(like -> new LikeResponse(like))
                     .collect(Collectors.toList());
 
-            return new PostResponse(updatedPost, likeResponses);
+            Optional<Post> originPost = postRepository.findById(updatedPost.getOriginalPost().getId());
+            RepostResponse repostResponse = new RepostResponse(originPost);
+            return new PostResponse(updatedPost, likeResponses, repostResponse);
         });
     }
 
@@ -93,4 +142,7 @@ public class PostService {
             return true;
         }).orElse(false);
     }
+
+
+
 }

@@ -19,15 +19,31 @@ public class PostResponse {
     private String content;
     //private Date createdAt;
     private Date createdAt;
+    private boolean isRepost;
+    private RepostResponse repostResponse;
     private List<LikeResponse> postLikes;
 
-    public PostResponse(Post entity, List<LikeResponse> postLikes){
+/*    public PostResponse(Post entity, List<LikeResponse> postLikes){
         this.id = entity.getId();
         this.userId = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
         this.title = entity.getTitle();
         this.content = entity.getContent();
+        this.isRepost = entity.isRepost();
         this.createdAt = entity.getCreated_at();
+        this.repostResponse = null;
+        this.postLikes = postLikes;
+    }*/
+
+    public PostResponse(Post entity, List<LikeResponse> postLikes, RepostResponse repostResponse){
+        this.id = entity.getId();
+        this.userId = entity.getUser().getId();
+        this.username = entity.getUser().getUsername();
+        this.title = entity.getTitle();
+        this.content = entity.getContent();
+        this.isRepost = entity.isRepost();
+        this.createdAt = entity.getCreated_at();
+        this.repostResponse = repostResponse;
         this.postLikes = postLikes;
     }
 

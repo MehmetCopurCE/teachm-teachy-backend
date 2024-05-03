@@ -30,6 +30,14 @@ public class Post {
     //@JsonIgnore
     private User user;
 
+
+    private boolean isRepost;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="original_post_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Post originalPost;
+
     @NotNull
     @NotBlank(message = "Post başlığı boş olamaz")
     private String title;
