@@ -20,7 +20,7 @@ public class PostResponse {
     //private Date createdAt;
     private Date createdAt;
     private boolean isRepost;
-    private RepostResponse repostResponse;
+    private RepostResponse originPost;
     private List<LikeResponse> postLikes;
 
 /*    public PostResponse(Post entity, List<LikeResponse> postLikes){
@@ -43,7 +43,7 @@ public class PostResponse {
         this.content = entity.getContent();
         this.isRepost = entity.isRepost();
         this.createdAt = entity.getCreated_at();
-        this.repostResponse = repostResponse;
+        this.originPost = repostResponse;
         this.postLikes = postLikes;
     }
 

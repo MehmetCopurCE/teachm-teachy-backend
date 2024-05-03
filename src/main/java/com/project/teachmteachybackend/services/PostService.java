@@ -1,6 +1,4 @@
 package com.project.teachmteachybackend.services;
-
-
 import com.project.teachmteachybackend.dto.like.response.LikeResponse;
 import com.project.teachmteachybackend.dto.post.request.RepostCreateRequest;
 import com.project.teachmteachybackend.dto.post.response.PostResponse;
@@ -126,12 +124,15 @@ public class PostService {
             // Fetch the likes for the post and convert them into LikeResponse objects
             List<Like> likes = likeRepository.findByPostId(Optional.ofNullable(updatedPost.getId()));
             List<LikeResponse> likeResponses = likes.stream()
-                    .map(like -> new LikeResponse(like))
+                    .map(LikeResponse::new)
                     .collect(Collectors.toList());
 
-            Optional<Post> originPost = postRepository.findById(updatedPost.getOriginalPost().getId());
-            RepostResponse repostResponse = new RepostResponse(originPost);
-            return new PostResponse(updatedPost, likeResponses, repostResponse);
+            if(existingPost.isRepost()){
+                Optional<Post> originPost = postRepository.findById(updatedPost.getOriginalPost().getId());
+                RepostResponse repostResponse = new RepostResponse(originPost);
+                return new PostResponse(updatedPost, likeResponses, repostResponse);
+            }
+            return new PostResponse(updatedPost, likeResponses, null);
         });
     }
 
