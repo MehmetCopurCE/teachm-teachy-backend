@@ -14,6 +14,7 @@ import com.project.teachmteachybackend.exceptions.UserNotFoundException;
 import com.project.teachmteachybackend.repositories.FollowRepository;
 import com.project.teachmteachybackend.repositories.UserRepository;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -223,4 +224,14 @@ public class UserService {
         return userRepository.findAllById(friendIds).stream().map(FriendResponse::new).collect(Collectors.toList());
     }
 
+    public List<FollowResponse> getRejectedRequestsById(Long userId) {
+        Optional<User> user = userRepository.findById(userId);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException("User cannot found with userId: " + userId); // Özel bir istisna fırlatarak hatayı anlamlandırın
+        }
+
+        List<Follow> requestList = followRepository.findByReceiverIdAndStatus(userId, FollowStatus.REJECTED);
+        return requestList.stream().map(FollowResponse::new).collect(Collectors.toList());
+
+    }
 }

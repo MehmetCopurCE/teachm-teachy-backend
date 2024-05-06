@@ -114,6 +114,7 @@ public class UserController {
                     .body(Collections.singletonMap("error", "User not found"));
         }
     }
+
     @PostMapping("/{userId}/accept-friend-request")
     public ResponseEntity<?> acceptFriendRequest(@PathVariable Long userId, @RequestParam Long senderId) {
         try {
@@ -155,6 +156,11 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Collections.singletonMap("error", "User not found"));
         }
+    }
+
+    @GetMapping("/{userId}/rejected-requests")
+    public  ResponseEntity<?> getRejectedRequest(@PathVariable Long userId){
+        return ResponseEntity.ok(userService.getRejectedRequestsById(userId));
     }
 
 
