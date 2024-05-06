@@ -47,17 +47,18 @@ public class PostResponse {
         this.postLikes = postLikes;
     }
 
-    public Post toPost(UserService userService){
-        User user = userService.getUserById(this.id);
+    public Post toPost(UserService userService, Long postId){
+        User user = userService.getUserById(this.userId);
         if(user == null)
             return null;
         Post post = new Post();
-        post.setId(this.id);
+        post.setId(postId);
         post.setTitle(this.title);
         post.setContent(this.content);
         post.setUser(user);
         post.setCreated_at(this.createdAt);
         return post;
     }
+
 
 }
