@@ -38,7 +38,7 @@ public class CommentResponse {
 
         comment.setId(commentResponse.getId());
         comment.setUser(user);
-        comment.setPost(postResponse.toPost(userService));
+        comment.setPost(postResponse.toPost(userService, postResponse.getId()));
         return comment;
     }
 }
