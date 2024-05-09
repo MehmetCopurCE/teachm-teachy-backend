@@ -83,5 +83,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(BaseErrorException.class)
+    public ResponseEntity<ErrorResponse> handleBaseErrorException(BaseErrorException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setTimestamp(new Date());
+        errorResponse.setStatus(String.valueOf(ex.getStatus().value()));
+        errorResponse.setError(ex.getError());
+        errorResponse.setMessage(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
 }
