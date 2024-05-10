@@ -15,6 +15,7 @@ import java.util.Date;
 public class CommentResponse {
     private Long id;
     private Long userId;
+    private String username;
     private Long postId;
     private String content;
     //private Date createdAt;
@@ -24,6 +25,7 @@ public class CommentResponse {
         this.id = entity.getId();
         this.content = entity.getContent();
         this.userId = entity.getUser().getId();
+        this.username = entity.getUser().getUsername();
         this.postId = entity.getPost().getId();
         this.createdAt = entity.getCreated_at();
     }
