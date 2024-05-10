@@ -21,6 +21,8 @@ public class Follow {
 
     private Long senderId;
 
+    private String senderName;
+
     private Long receiverId;
 
     private LocalDateTime createdAt;

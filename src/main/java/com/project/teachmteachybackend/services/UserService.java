@@ -140,6 +140,7 @@ public class UserService {
             followRequest.setSenderId(user.getId());
             followRequest.setReceiverId(friend.getId());
             followRequest.setCreatedAt(LocalDateTime.now());
+            followRequest.setSenderName(user.getUsername());
             followRequest.setStatus(FollowStatus.PENDING);
             followRepository.save(followRequest);
 
@@ -177,6 +178,7 @@ public class UserService {
             followRequest.setSenderId(user.getId());
             followRequest.setReceiverId(friend.getId());
             followRequest.setCreatedAt(LocalDateTime.now());
+            followRequest.setSenderName(user.getUsername());
             followRequest.setStatus(FollowStatus.ACCEPTED);
             followRepository.save(followRequest);
 
@@ -224,6 +226,8 @@ public class UserService {
         if(follow2 != null){
             follow2.setStatus(FollowStatus.ACCEPTED);
             followRepository.save(follow2);
+        }else{
+            addFriend(user,friend);
         }
 
         FriendshipResponse response = new FriendshipResponse();
