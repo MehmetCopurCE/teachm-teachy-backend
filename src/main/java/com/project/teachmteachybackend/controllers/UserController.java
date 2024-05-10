@@ -2,6 +2,7 @@ package com.project.teachmteachybackend.controllers;
 
 import com.project.teachmteachybackend.dto.follow.response.FollowResponse;
 import com.project.teachmteachybackend.dto.friend.response.FriendResponse;
+import com.project.teachmteachybackend.dto.friend.response.FriendshipResponse;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import com.project.teachmteachybackend.exceptions.FriendRequestException;
@@ -45,7 +46,6 @@ public class UserController {
 //        User savedUser = userService.saveUser(createRequest);
 //        return ResponseEntity.ok(savedUser);
 //    }
-
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
@@ -57,7 +57,6 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı, userId: " + userId));
     }
-
 
 
     @PutMapping("/{userId}")
@@ -79,56 +78,22 @@ public class UserController {
      */
 
     @PostMapping("/{userId}/send-friend-request")
-    public ResponseEntity<?> sendFriendRequest(@PathVariable Long userId, @RequestParam Long friendId) {
-        try {
-            userService.sendFriendRequest(userId, friendId);
-            return ResponseEntity.ok().body(
-                    Map.of("success", true, "message", "Friend request sent successfully.")
-            );
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(404).body(
-                    Map.of("success", false, "message", "User not found.")
-            );
-        } catch (FriendRequestExistsException e) {
-            return ResponseEntity.status(409).body(
-                    Map.of("success", false, "message", "There already exist a friend request or they are already friends.")
-            );
-        } catch (FriendRequestException e) {
-            return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "User already followed.")
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(400).body(
-                    Map.of("success", false, "message", "Friend request could not send.")
-            );
-        }
+    public ResponseEntity<FriendshipResponse> sendFriendRequest(@PathVariable Long userId, @RequestParam Long friendId) {
+        return new ResponseEntity<>(userService.sendFriendRequest(userId, friendId), HttpStatus.OK);
+
     }
 
     @GetMapping("/{userId}/friend-requests")
-    public ResponseEntity<?> getFriendRequests(@PathVariable Long userId) {
-        try {
-            List<FollowResponse> requestsList = userService.getFriendRequests(userId);
-            return ResponseEntity.ok(requestsList);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Collections.singletonMap("error", "User not found"));
-        }
+    public ResponseEntity<List<FollowResponse>> getFriendRequests(@PathVariable Long userId) {
+        List<FollowResponse> requestsList = userService.getFriendRequests(userId);
+        return new ResponseEntity<>(requestsList, HttpStatus.OK);
+
+
     }
 
     @PostMapping("/{userId}/accept-friend-request")
-    public ResponseEntity<?> acceptFriendRequest(@PathVariable Long userId, @RequestParam Long senderId) {
-        try {
-            userService.acceptFriendRequest(userId, senderId);
-            return ResponseEntity.ok().body(Map.of("success", true, "message", "Arkadaşlık isteği kabul edildi."));
-        } catch (FriendRequestNotFoundException e) {
-            return ResponseEntity.status(404).body(Map.of("success", false, "message", "Arkadaşlık isteği bulunamadı."));
-        }catch (UserNotFoundException e) {
-            return ResponseEntity.status(404).body(Map.of("success", false, "message", "Sender or Receiver user cannot found."));
-        }catch (FriendRequestException e) {
-            return ResponseEntity.status(400).body(Map.of("success", false, "message", "They are already friends."));
-        } catch (Exception e) {
-            return ResponseEntity.status(400).body(Map.of("success", false, "message", "Arkadaşlık isteği kabul edilemedi."));
-        }
+    public ResponseEntity<FriendshipResponse> acceptFriendRequest(@PathVariable Long userId, @RequestParam Long senderId) {
+        return new ResponseEntity<>(userService.acceptFriendRequest(userId, senderId), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/reject-friend-request")
@@ -138,9 +103,9 @@ public class UserController {
             return ResponseEntity.ok().body(Map.of("success", true, "message", "Friend request rejected"));
         } catch (FriendRequestNotFoundException e) {
             return ResponseEntity.status(404).body(Map.of("success", false, "message", "Friend request could not found."));
-        }catch (UserNotFoundException e) {
+        } catch (UserNotFoundException e) {
             return ResponseEntity.status(404).body(Map.of("success", false, "message", "Sender or Receiver user cannot found."));
-        }catch (FriendRequestException e) {
+        } catch (FriendRequestException e) {
             return ResponseEntity.status(400).body(Map.of("success", false, "message", "They are already friends."));
         } catch (Exception e) {
             return ResponseEntity.status(400).body(Map.of("success", false, "message", "Friend request could not rejected."));
@@ -159,7 +124,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/rejected-requests")
-    public  ResponseEntity<?> getRejectedRequest(@PathVariable Long userId){
+    public ResponseEntity<?> getRejectedRequest(@PathVariable Long userId) {
         return ResponseEntity.ok(userService.getRejectedRequestsById(userId));
     }
 
