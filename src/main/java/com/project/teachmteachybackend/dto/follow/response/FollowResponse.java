@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 public class FollowResponse {
     private Long senderId;
+    private String senderName;
     private LocalDateTime createdAt;
     private String status;
 
@@ -15,5 +16,6 @@ public class FollowResponse {
         this.senderId = entity.getSenderId();
         this.status = String.valueOf(entity.getStatus());
         this.createdAt = entity.getCreatedAt();
+        this.senderName = entity.getSenderName();
     }
 }
