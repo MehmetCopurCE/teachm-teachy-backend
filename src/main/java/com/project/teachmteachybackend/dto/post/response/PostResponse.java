@@ -4,6 +4,7 @@ import com.project.teachmteachybackend.dto.like.response.LikeResponse;
 import com.project.teachmteachybackend.entities.Post;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.services.Impl.UserServiceImpl;
+import com.project.teachmteachybackend.services.UserService;
 import lombok.Data;
 
 import java.util.Date;
@@ -50,7 +51,7 @@ public class PostResponse {
         this.postLikes = postLikes;
     }
 
-    public Post toPost(UserServiceImpl userService, Long postId) {
+    public Post toPost(UserService userService, Long postId) {
         User user = userService.getUserById(this.userId);
         if (user == null)
             return null;

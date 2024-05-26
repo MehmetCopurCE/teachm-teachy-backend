@@ -58,7 +58,7 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<CommentResponse> updateComment(@PathVariable Long commentId, @RequestBody @Valid CommentUpdateRequest updateRequest){
+    public ResponseEntity<Object> updateComment(@PathVariable Long commentId, @RequestBody @Valid CommentUpdateRequest updateRequest){
         return commentService.updateComment(commentId, updateRequest).map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
     }
 
