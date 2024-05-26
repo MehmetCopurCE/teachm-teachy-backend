@@ -10,7 +10,6 @@ import com.project.teachmteachybackend.entities.User;
 
 import com.project.teachmteachybackend.repositories.LikeRepository;
 import com.project.teachmteachybackend.services.LikeService;
-import com.project.teachmteachybackend.services.PostService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +24,11 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
     @Lazy
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final UserServiceImpl userService;
 
 
-    public LikeServiceImpl(LikeRepository likeRepository, @Lazy PostService postService, UserServiceImpl userService) {
+    public LikeServiceImpl(LikeRepository likeRepository, @Lazy PostServiceImpl postService, UserServiceImpl userService) {
         this.likeRepository = likeRepository;
         this.postService = postService;
         this.userService = userService;

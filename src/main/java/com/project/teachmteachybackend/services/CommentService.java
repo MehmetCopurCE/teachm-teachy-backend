@@ -7,6 +7,7 @@ import com.project.teachmteachybackend.dto.post.response.PostResponse;
 import com.project.teachmteachybackend.entities.Comment;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.CommentRepository;
+import com.project.teachmteachybackend.services.Impl.PostServiceImpl;
 import com.project.teachmteachybackend.services.Impl.UserServiceImpl;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +19,10 @@ import java.util.stream.Collectors;
 @Service
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final PostService postService;
+    private final PostServiceImpl postService;
     private final UserServiceImpl userService;
 
-    public CommentService(CommentRepository commentRepository, PostService postService, UserServiceImpl userService) {
+    public CommentService(CommentRepository commentRepository, PostServiceImpl postService, UserServiceImpl userService) {
         this.commentRepository = commentRepository;
         this.postService = postService;
         this.userService = userService;
