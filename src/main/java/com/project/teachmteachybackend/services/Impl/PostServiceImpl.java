@@ -12,6 +12,7 @@ import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import com.project.teachmteachybackend.services.LikeService;
 import com.project.teachmteachybackend.services.PostService;
+import com.project.teachmteachybackend.services.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -22,11 +23,11 @@ import java.util.stream.Collectors;
 @Service
 public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
-    private UserServiceImpl userService;
+    private UserService userService;
     private LikeService likeService;
     private final LikeRepository likeRepository;
 
-    public PostServiceImpl(PostRepository postRepository, UserServiceImpl userService, LikeServiceImpl likeService, LikeRepository likeRepository) {
+    public PostServiceImpl(PostRepository postRepository, UserService userService, LikeServiceImpl likeService, LikeRepository likeRepository) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.likeService = likeService;
@@ -64,6 +65,8 @@ public class PostServiceImpl implements PostService {
         toSave.setCreated_at(new Date());
         toSave.setRepost(false);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
         toSave.setOriginalPost(null);
+        toSave.setRepostTitle(null);
+        toSave.setRepostContent(null);
         Post savedPost = postRepository.save(toSave);
 
         // Fetch the likes for the post and convert them into LikeResponse objects
@@ -92,6 +95,8 @@ public class PostServiceImpl implements PostService {
         toSave.setCreated_at(new Date());
         toSave.setRepost(true);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
         toSave.setOriginalPost(post);
+        toSave.setRepostTitle(post.getTitle());
+        toSave.setRepostContent(post.getContent());
         Post savedPost = postRepository.save(toSave);
 
         // Fetch the likes for the post and convert them into LikeResponse objects

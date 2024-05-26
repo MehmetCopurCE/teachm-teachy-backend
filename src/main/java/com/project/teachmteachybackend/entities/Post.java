@@ -42,10 +42,16 @@ public class Post {
     @NotBlank(message = "Post başlığı boş olamaz")
     private String title;
 
+    private String repostTitle;
+
     // -- 1 --
     @Lob
     @Column(columnDefinition="text")
     private String content;
+
+    @Lob
+    @Column(columnDefinition="text")
+    private String repostContent;
 
     //private Date created_at;
     @Temporal(TemporalType.TIMESTAMP)
