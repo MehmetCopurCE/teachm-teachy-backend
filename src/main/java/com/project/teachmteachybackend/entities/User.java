@@ -1,5 +1,6 @@
 package com.project.teachmteachybackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.teachmteachybackend.enums.AccountPrivacy;
 import com.project.teachmteachybackend.enums.Role;
 import jakarta.persistence.*;
@@ -19,6 +20,7 @@ public class User {
 
     private String username;
 
+    @JsonIgnore
     private String password;
 
     private String firstName;
