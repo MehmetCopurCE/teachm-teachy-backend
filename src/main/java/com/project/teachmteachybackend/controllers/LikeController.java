@@ -4,6 +4,7 @@ package com.project.teachmteachybackend.controllers;
 import com.project.teachmteachybackend.dto.like.request.LikeCreateRequest;
 import com.project.teachmteachybackend.dto.like.response.LikeResponse;
 import com.project.teachmteachybackend.entities.Like;
+import com.project.teachmteachybackend.services.Impl.LikeServiceImpl;
 import com.project.teachmteachybackend.services.LikeService;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ import java.util.Optional;
 
         private LikeService likeService;
 
-        public LikeController(LikeService likeService) {
+        public LikeController(LikeServiceImpl likeService) {
             this.likeService = likeService;
         }
 
