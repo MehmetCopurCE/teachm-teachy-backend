@@ -64,6 +64,8 @@ public class PostServiceImpl implements PostService {
         toSave.setCreated_at(new Date());
         toSave.setRepost(false);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
         toSave.setOriginalPost(null);
+        toSave.setRepostTitle(null);
+        toSave.setRepostContent(null);
         Post savedPost = postRepository.save(toSave);
 
         // Fetch the likes for the post and convert them into LikeResponse objects
@@ -92,6 +94,8 @@ public class PostServiceImpl implements PostService {
         toSave.setCreated_at(new Date());
         toSave.setRepost(true);   //ilk post oluşturulurken isRepost u false olarak ayarlıyoruz
         toSave.setOriginalPost(post);
+        toSave.setRepostTitle(post.getTitle());
+        toSave.setRepostContent(post.getContent());
         Post savedPost = postRepository.save(toSave);
 
         // Fetch the likes for the post and convert them into LikeResponse objects

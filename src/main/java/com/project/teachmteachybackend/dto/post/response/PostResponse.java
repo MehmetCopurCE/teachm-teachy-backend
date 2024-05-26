@@ -19,6 +19,8 @@ public class PostResponse {
     //private Date createdAt;
     private Date createdAt;
     private boolean isRepost;
+    private String repostTitle;
+    private String repostContent;
     private RepostResponse originPost;
     private List<LikeResponse> postLikes;
 
@@ -34,21 +36,23 @@ public class PostResponse {
         this.postLikes = postLikes;
     }*/
 
-    public PostResponse(Post entity, List<LikeResponse> postLikes, RepostResponse repostResponse){
+    public PostResponse(Post entity, List<LikeResponse> postLikes, RepostResponse repostResponse) {
         this.id = entity.getId();
         this.userId = entity.getUser().getId();
         this.username = entity.getUser().getUsername();
         this.title = entity.getTitle();
         this.content = entity.getContent();
         this.isRepost = entity.isRepost();
+        this.repostTitle = entity.getRepostTitle();
+        this.repostContent = entity.getRepostContent();
         this.createdAt = entity.getCreated_at();
         this.originPost = repostResponse;
         this.postLikes = postLikes;
     }
 
-    public Post toPost(UserServiceImpl userService, Long postId){
+    public Post toPost(UserServiceImpl userService, Long postId) {
         User user = userService.getUserById(this.userId);
-        if(user == null)
+        if (user == null)
             return null;
         Post post = new Post();
         post.setId(postId);
