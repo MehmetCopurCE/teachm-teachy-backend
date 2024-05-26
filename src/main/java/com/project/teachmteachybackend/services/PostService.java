@@ -11,6 +11,7 @@ import com.project.teachmteachybackend.repositories.PostRepository;
 import com.project.teachmteachybackend.dto.post.request.PostCreateRequest;
 import com.project.teachmteachybackend.dto.post.request.PostUpdateRequest;
 import com.project.teachmteachybackend.services.Impl.LikeServiceImpl;
+import com.project.teachmteachybackend.services.Impl.UserServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -21,11 +22,11 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private PostRepository postRepository;
-    private UserService userService;
+    private UserServiceImpl userService;
     private LikeService likeService;
     private final LikeRepository likeRepository;
 
-    public PostService(PostRepository postRepository, UserService userService, LikeServiceImpl likeService, LikeRepository likeRepository) {
+    public PostService(PostRepository postRepository, UserServiceImpl userService, LikeServiceImpl likeService, LikeRepository likeRepository) {
         this.postRepository = postRepository;
         this.userService = userService;
         this.likeService = likeService;
