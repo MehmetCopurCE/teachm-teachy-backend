@@ -279,4 +279,31 @@ public class UserServiceImpl implements UserService {
         return requestList.stream().map(FollowResponse::new).collect(Collectors.toList());
 
     }
+
+    @Override
+    public FriendshipResponse unfollowFriend(Long userId, Long friendId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with ID: "+ userId ));
+        User friend = userRepository.findById(friendId).orElseThrow(() -> new UserNotFoundException("Kullanıcı bulunamadı with ID: "+ friendId ));
+        FriendshipResponse response = new FriendshipResponse();
+
+        if (isFriend(user, friend) || isFriend(friend,user)) {
+            Follow follow = followRepository.findBySenderIdAndReceiverId(user.getId(), friend.getId());
+            Follow follow2 = followRepository.findBySenderIdAndReceiverId(friend.getId(), user.getId());
+            follow.setStatus(FollowStatus.REJECTED);
+            followRepository.save(follow);
+
+            if(follow2 != null){
+                follow2.setStatus(FollowStatus.REJECTED);
+                followRepository.save(follow2);
+            }
+
+            response.setMessage(friend.getFirstName() + " " + friend.getLastName() + " is unfollowed");
+            response.setStatus(HttpStatus.OK);
+        }else{
+            response.setMessage(friend.getFirstName() + " " + friend.getLastName() + " is not unfollowed");
+            response.setStatus(HttpStatus.BAD_REQUEST);
+        }
+
+        return response;
+    }
 }

@@ -1,4 +1,4 @@
-package com.project.teachmteachybackend.services;
+package com.project.teachmteachybackend.services.Impl;
 
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.repositories.UserRepository;

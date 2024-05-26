@@ -126,5 +126,10 @@ public class UserController {
         return ResponseEntity.ok(userService.getRejectedRequestsByUserId(userId));
     }
 
+    @PostMapping("/{userId}/unfollowFriend")
+    public ResponseEntity<FriendshipResponse> unfollowFriend(@PathVariable Long userId, @RequestParam Long friendId){
+        return new ResponseEntity<>(userService.unfollowFriend(userId, friendId), HttpStatus.OK);
+    }
+
 
 }

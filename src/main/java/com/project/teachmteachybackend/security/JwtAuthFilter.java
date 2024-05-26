@@ -1,13 +1,11 @@
 package com.project.teachmteachybackend.security;
 
-import com.project.teachmteachybackend.exceptions.InvalidCredentialsException;
-import com.project.teachmteachybackend.services.UserDetailsServiceImpl;
+import com.project.teachmteachybackend.services.Impl.UserDetailsServiceImpl;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;

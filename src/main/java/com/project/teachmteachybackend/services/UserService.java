@@ -39,4 +39,6 @@ public interface UserService {
     List<FriendResponse> getFriendsByUserId(Long userId);
 
     List<FollowResponse> getRejectedRequestsByUserId(Long userId);
+
+    FriendshipResponse unfollowFriend(Long userId, Long friendId);
 }
