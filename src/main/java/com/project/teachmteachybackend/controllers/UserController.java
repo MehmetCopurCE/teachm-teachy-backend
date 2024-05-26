@@ -6,14 +6,12 @@ import com.project.teachmteachybackend.dto.friend.response.FriendshipResponse;
 import com.project.teachmteachybackend.entities.User;
 import com.project.teachmteachybackend.dto.user.request.UserCreateRequest;
 import com.project.teachmteachybackend.exceptions.FriendRequestException;
-import com.project.teachmteachybackend.exceptions.FriendRequestExistsException;
 import com.project.teachmteachybackend.exceptions.FriendRequestNotFoundException;
 import com.project.teachmteachybackend.exceptions.UserNotFoundException;
 import com.project.teachmteachybackend.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -115,7 +113,7 @@ public class UserController {
     @GetMapping("/{userId}/friends")
     public ResponseEntity<?> getFriends(@PathVariable Long userId) {
         try {
-            List<FriendResponse> friendList = userService.getFriendsById(userId);
+            List<FriendResponse> friendList = userService.getFriendsByUserId(userId);
             return ResponseEntity.ok(friendList);
         } catch (UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -125,7 +123,12 @@ public class UserController {
 
     @GetMapping("/{userId}/rejected-requests")
     public ResponseEntity<?> getRejectedRequest(@PathVariable Long userId) {
-        return ResponseEntity.ok(userService.getRejectedRequestsById(userId));
+        return ResponseEntity.ok(userService.getRejectedRequestsByUserId(userId));
+    }
+
+    @PostMapping("/{userId}/unfollowFriend")
+    public ResponseEntity<FriendshipResponse> unfollowFriend(@PathVariable Long userId, @RequestParam Long friendId){
+        return new ResponseEntity<>(userService.unfollowFriend(userId, friendId), HttpStatus.OK);
     }
 
 

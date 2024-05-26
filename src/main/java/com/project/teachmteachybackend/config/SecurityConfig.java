@@ -2,7 +2,7 @@ package com.project.teachmteachybackend.config;
 
 import com.project.teachmteachybackend.security.JwtAuthEntryPoint;
 import com.project.teachmteachybackend.security.JwtAuthFilter;
-import com.project.teachmteachybackend.services.UserDetailsServiceImpl;
+import com.project.teachmteachybackend.services.Impl.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
